@@ -8,7 +8,7 @@ export class UsersController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getAllUser(): Promise<User[]> {
+  async getAllUser(): Promise<Omit<User, 'password'>[]> {
     return await this.usersService.getAllUsers();
   }
 }

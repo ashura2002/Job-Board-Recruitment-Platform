@@ -25,8 +25,8 @@ model User {
   // One-to-many: recruiter -> jobs
   postedJobs Job[] @relation("RecruiterJobs")
 
-  // Many-to-many: jobseeker <-> jobs via applications
-  applications Application[]
+  // One-to-many: user -> applications
+  applications Application[] @relation("UserApplications")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -41,10 +41,10 @@ model Job {
 
   // Recruiter relation
   userId Int
-  user   User @relation("RecruiterJobs", fields: [userId], references: [id])
+  user   User @relation("RecruiterJobs", fields: [userId], references: [id], onDelete: Cascade)
 
   // Applicants relation
-  applications Application[]
+  applications Application[] @relation("JobApplications")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -54,10 +54,10 @@ model Application {
   id Int @id @default(autoincrement())
 
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation("UserApplications", fields: [userId], references: [id], onDelete: Cascade)
 
   jobId Int
-  job   Job @relation(fields: [jobId], references: [id])
+  job   Job @relation("JobApplications", fields: [jobId], references: [id], onDelete: Cascade)
 
   status     String  @default("applied")
   resumeLink String?
