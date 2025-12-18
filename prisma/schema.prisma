@@ -1,0 +1,67 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  Admin
+  Recruiter
+  Jobseeker
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  fullname String
+  role     Role   @default(Jobseeker)
+  age      Int
+
+  // One-to-many: recruiter -> jobs
+  postedJobs Job[] @relation("RecruiterJobs")
+
+  // Many-to-many: jobseeker <-> jobs via applications
+  applications Application[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Job {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  location    String
+  salaryRange String
+
+  // Recruiter relation
+  userId Int
+  user   User @relation("RecruiterJobs", fields: [userId], references: [id])
+
+  // Applicants relation
+  applications Application[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Application {
+  id Int @id @default(autoincrement())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  jobId Int
+  job   Job @relation(fields: [jobId], references: [id])
+
+  status     String  @default("applied")
+  resumeLink String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
