@@ -14,6 +14,14 @@ export class UsersService {
     return users;
   }
 
+  async findById(userId: number): Promise<IUserWithOutPassword> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
   async findUserbyEmail(email: string): Promise<IUserWithOutPassword | null> {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -31,7 +39,7 @@ export class UsersService {
     return user;
   }
 
-  private get userSelectedFields() {
+  get userSelectedFields() {
     return {
       id: true,
       email: true,
@@ -39,6 +47,7 @@ export class UsersService {
       username: true,
       role: true,
       age: true,
+      isActive: true,
       createdAt: true,
       updatedAt: true,
     };

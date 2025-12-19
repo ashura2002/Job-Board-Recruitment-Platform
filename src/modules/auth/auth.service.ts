@@ -14,7 +14,7 @@ import {
 import { IUserWithOutPassword } from '../users/dto/user-response.dto';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDTO } from './dto/login.dto';
-import { IJwtResponse } from './types/jwt.types';
+import { IJwtResponse } from '../../common/types/jwt.types';
 
 @Injectable()
 export class AuthService {
@@ -36,9 +36,15 @@ export class AuthService {
     const { username, password } = dto;
     const user = await this.userService.findByUserName(username);
     const isPasswordMatch = await compareHashPassword(password, user.password);
+
+    await this.prismaService.user.update({
+      where: { id: user.id },
+      data: { isActive: true },
+    });
+
     if (!isPasswordMatch) throw new BadRequestException('Invalid Credentials');
     const payload: IJwtResponse = {
-      id: user.id,
+      userId: user.id,
       email: user.email,
       role: user.role,
       fullname: user.fullname,
@@ -46,6 +52,14 @@ export class AuthService {
     };
     const accessToken = await this.jwtService.signAsync(payload);
     return accessToken;
+  }
+
+  async logout(userId: number): Promise<void> {
+    const user = await this.userService.findById(userId);
+    await this.prismaService.user.update({
+      where: { id: user.id },
+      data: { isActive: false },
+    });
   }
 
   private async registerUserWithRole(
@@ -67,16 +81,7 @@ export class AuthService {
           password: hash,
           role,
         },
-        select: {
-          id: true,
-          email: true,
-          fullname: true,
-          username: true,
-          role: true,
-          age: true,
-          createdAt: true,
-          updatedAt: true,
-        },
+        select: this.userService.userSelectedFields,
       });
       return user;
     } catch (error) {

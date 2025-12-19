@@ -1,9 +1,18 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { IUserWithOutPassword } from '../users/dto/user-response.dto';
 import { LoginDTO } from './dto/login.dto';
-import { IJwtResponse } from './types/jwt.types';
+import type { AuthUser } from 'src/common/types/auth-user';
+import { JwtGuard } from 'src/common/guards/Jwt.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -32,5 +41,14 @@ export class AuthController {
   ): Promise<{ message: string; token: string }> {
     const accessToken = await this.authService.login(dto);
     return { message: 'Login Successfully', token: accessToken };
+  }
+
+  @Post('logout')
+  @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
+  async logout(@Req() req: AuthUser): Promise<{ message: string }> {
+    const { userId } = req.user;
+    await this.authService.logout(userId);
+    return { message: 'Logout Successfully' };
   }
 }
