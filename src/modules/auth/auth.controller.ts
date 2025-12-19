@@ -1,19 +1,25 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
+import { IUserWithOutPassword } from '../users/dto/user-response.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('registration/recruiter')
-  @HttpCode(HttpStatus.OK)
-  async registerAsRecruiter(@Body() dto: CreateUserDTO): Promise<any> {}
+  @HttpCode(HttpStatus.CREATED)
+  async registerAsRecruiter(
+    @Body() dto: CreateUserDTO,
+  ): Promise<IUserWithOutPassword> {
+    return await this.authService.registerAsRecruiter(dto);
+  }
 
   @Post('registration/jobSeeker')
-  @HttpCode(HttpStatus.OK)
-  async registerAsJobSeeker(@Body() dto: CreateUserDTO): Promise<any> {}
+  @HttpCode(HttpStatus.CREATED)
+  async registerAsJobSeeker(
+    @Body() dto: CreateUserDTO,
+  ): Promise<IUserWithOutPassword> {
+    return await this.authService.registerAsJobSeeker(dto);
+  }
 }
-// add dry principle for registering users
-// remove sensitive data on response
-// study prisma orm relations
