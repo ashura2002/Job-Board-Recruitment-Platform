@@ -1,7 +1,7 @@
 import { Role } from 'src/generated/prisma/enums';
 
 export type IJwtResponse = {
-  id: number;
+  userId: number;
   username: string;
   role: Role;
   email: string;
