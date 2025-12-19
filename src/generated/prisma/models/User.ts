@@ -44,6 +44,7 @@ export type UserMinAggregateOutputType = {
   username: string | null
   role: $Enums.Role | null
   age: number | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +57,7 @@ export type UserMaxAggregateOutputType = {
   username: string | null
   role: $Enums.Role | null
   age: number | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -68,6 +70,7 @@ export type UserCountAggregateOutputType = {
   username: number
   role: number
   age: number
+  isActive: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -92,6 +95,7 @@ export type UserMinAggregateInputType = {
   username?: true
   role?: true
   age?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,6 +108,7 @@ export type UserMaxAggregateInputType = {
   username?: true
   role?: true
   age?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -116,6 +121,7 @@ export type UserCountAggregateInputType = {
   username?: true
   role?: true
   age?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -215,6 +221,7 @@ export type UserGroupByOutputType = {
   username: string
   role: $Enums.Role
   age: number
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -250,6 +257,7 @@ export type UserWhereInput = {
   username?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   age?: Prisma.IntFilter<"User"> | number
+  isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   postedJobs?: Prisma.JobListRelationFilter
@@ -264,6 +272,7 @@ export type UserOrderByWithRelationInput = {
   username?: Prisma.SortOrder
   role?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   postedJobs?: Prisma.JobOrderByRelationAggregateInput
@@ -281,6 +290,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   fullname?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   age?: Prisma.IntFilter<"User"> | number
+  isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   postedJobs?: Prisma.JobListRelationFilter
@@ -295,6 +305,7 @@ export type UserOrderByWithAggregationInput = {
   username?: Prisma.SortOrder
   role?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -315,6 +326,7 @@ export type UserScalarWhereWithAggregatesInput = {
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   age?: Prisma.IntWithAggregatesFilter<"User"> | number
+  isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -326,6 +338,7 @@ export type UserCreateInput = {
   username: string
   role?: $Enums.Role
   age: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   postedJobs?: Prisma.JobCreateNestedManyWithoutUserInput
@@ -340,6 +353,7 @@ export type UserUncheckedCreateInput = {
   username: string
   role?: $Enums.Role
   age: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutUserInput
@@ -353,6 +367,7 @@ export type UserUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedJobs?: Prisma.JobUpdateManyWithoutUserNestedInput
@@ -367,6 +382,7 @@ export type UserUncheckedUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedJobs?: Prisma.JobUncheckedUpdateManyWithoutUserNestedInput
@@ -381,6 +397,7 @@ export type UserCreateManyInput = {
   username: string
   role?: $Enums.Role
   age: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -392,6 +409,7 @@ export type UserUpdateManyMutationInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -404,6 +422,7 @@ export type UserUncheckedUpdateManyInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -416,6 +435,7 @@ export type UserCountOrderByAggregateInput = {
   username?: Prisma.SortOrder
   role?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -433,6 +453,7 @@ export type UserMaxOrderByAggregateInput = {
   username?: Prisma.SortOrder
   role?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -445,6 +466,7 @@ export type UserMinOrderByAggregateInput = {
   username?: Prisma.SortOrder
   role?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -473,6 +495,10 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -514,6 +540,7 @@ export type UserCreateWithoutPostedJobsInput = {
   username: string
   role?: $Enums.Role
   age: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationCreateNestedManyWithoutUserInput
@@ -527,6 +554,7 @@ export type UserUncheckedCreateWithoutPostedJobsInput = {
   username: string
   role?: $Enums.Role
   age: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutUserInput
@@ -555,6 +583,7 @@ export type UserUpdateWithoutPostedJobsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUpdateManyWithoutUserNestedInput
@@ -568,6 +597,7 @@ export type UserUncheckedUpdateWithoutPostedJobsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutUserNestedInput
@@ -580,6 +610,7 @@ export type UserCreateWithoutApplicationsInput = {
   username: string
   role?: $Enums.Role
   age: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   postedJobs?: Prisma.JobCreateNestedManyWithoutUserInput
@@ -593,6 +624,7 @@ export type UserUncheckedCreateWithoutApplicationsInput = {
   username: string
   role?: $Enums.Role
   age: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   postedJobs?: Prisma.JobUncheckedCreateNestedManyWithoutUserInput
@@ -621,6 +653,7 @@ export type UserUpdateWithoutApplicationsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedJobs?: Prisma.JobUpdateManyWithoutUserNestedInput
@@ -634,6 +667,7 @@ export type UserUncheckedUpdateWithoutApplicationsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedJobs?: Prisma.JobUncheckedUpdateManyWithoutUserNestedInput
@@ -687,6 +721,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   username?: boolean
   role?: boolean
   age?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   postedJobs?: boolean | Prisma.User$postedJobsArgs<ExtArgs>
@@ -702,6 +737,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   role?: boolean
   age?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -714,6 +750,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   role?: boolean
   age?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -726,11 +763,12 @@ export type UserSelectScalar = {
   username?: boolean
   role?: boolean
   age?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "fullname" | "username" | "role" | "age" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "fullname" | "username" | "role" | "age" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   postedJobs?: boolean | Prisma.User$postedJobsArgs<ExtArgs>
   applications?: boolean | Prisma.User$applicationsArgs<ExtArgs>
@@ -753,6 +791,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     username: string
     role: $Enums.Role
     age: number
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1187,6 +1226,7 @@ export interface UserFieldRefs {
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly age: Prisma.FieldRef<"User", 'Int'>
+  readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
