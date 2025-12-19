@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from 'src/generated/prisma/client';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { IUserWithOutPassword } from './dto/user-response.dto';
@@ -9,22 +9,38 @@ export class UsersService {
 
   async getAllUsers(): Promise<IUserWithOutPassword[]> {
     const users = await this.prisma.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        fullname: true,
-        username: true,
-        role: true,
-        age: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: this.userSelectedFields,
     });
     return users;
   }
 
-  async findUserbyEmail(email: string): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+  async findUserbyEmail(email: string): Promise<IUserWithOutPassword | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      select: this.userSelectedFields,
+    });
     return user;
+  }
+
+  // for login only to compare password in dto to db password
+  async findByUserName(username: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+    });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  private get userSelectedFields() {
+    return {
+      id: true,
+      email: true,
+      fullname: true,
+      username: true,
+      role: true,
+      age: true,
+      createdAt: true,
+      updatedAt: true,
+    };
   }
 }
