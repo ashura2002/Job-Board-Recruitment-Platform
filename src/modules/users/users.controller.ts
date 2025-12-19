@@ -1,6 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from 'src/generated/prisma/client';
+import { IUserWithOutPassword } from './dto/user-response.dto';
 
 @Controller('users')
 export class UsersController {
@@ -8,7 +8,7 @@ export class UsersController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getAllUser(): Promise<Omit<User, 'password'>[]> {
+  async getAllUser(): Promise<IUserWithOutPassword[]> {
     return await this.usersService.getAllUsers();
   }
 }
