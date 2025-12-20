@@ -7,6 +7,7 @@ export type IUserWithOutPassword = {
   username: string;
   role: Role;
   age: number;
+  deletedAt: Date | null;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
