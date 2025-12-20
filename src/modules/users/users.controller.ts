@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -6,6 +7,7 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -17,6 +19,7 @@ import { RolesGuard } from 'src/common/guards/role.guard';
 import { Role } from 'src/generated/prisma/enums';
 import { Roles } from 'src/common/decorators/role.decorator';
 import type { AuthUser } from 'src/common/types/auth-user';
+import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Controller('users')
 @ApiBearerAuth('access-token')
@@ -50,6 +53,19 @@ export class UsersController {
   @Roles(Role.Admin)
   async getUserById(@Param('userId', ParseIntPipe) userId: number) {
     return await this.usersService.findById(userId);
+  }
+
+  @Put('own-details')
+  @HttpCode(HttpStatus.OK)
+  async updateOwnDetails(
+    @Body() updateDTO: UpdateUserDTO,
+    @Req() req: AuthUser,
+  ): Promise<{ message: string }> {
+    const { userId } = req.user;
+    await this.usersService.updateOwnDetails(updateDTO, userId);
+    return {
+      message: 'Updated Successfully. Changes will reflect on next login',
+    };
   }
 
   @Delete('admin/:userId')
