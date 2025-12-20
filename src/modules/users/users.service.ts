@@ -1,7 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Role, User } from 'src/generated/prisma/client';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { IUserWithOutPassword } from './dto/user-response.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
+import { hashPassword } from 'src/common/helper/password-hasher';
 
 @Injectable()
 export class UsersService {
@@ -30,6 +36,17 @@ export class UsersService {
     });
     if (!user) throw new NotFoundException('User not found');
     return user;
+  }
+
+  async updateOwnDetails(dto: UpdateUserDTO, userId: number): Promise<void> {
+    const { username, password } = dto;
+    const user = await this.findById(userId);
+    const hash = await hashPassword(password);
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { username, password: hash },
+      select: this.userSelectedFields,
+    });
   }
 
   async deleteUser(userId: number): Promise<void> {
@@ -64,11 +81,10 @@ export class UsersService {
   }
 
   // for login only to compare password in dto to db password
-  async findByUserName(username: string): Promise<User> {
+  async findByUserName(username: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { username },
     });
-    if (!user) throw new NotFoundException('User not found');
     return user;
   }
 

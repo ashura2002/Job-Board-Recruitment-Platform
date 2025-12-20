@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
@@ -56,6 +57,7 @@ export class AuthService {
   async login(dto: LoginDTO): Promise<string> {
     const { username, password } = dto;
     const user = await this.userService.findByUserName(username);
+    if (!user) throw new NotFoundException('User not found');
 
     if (user.deletedAt)
       throw new BadRequestException(
