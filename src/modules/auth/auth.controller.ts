@@ -13,6 +13,7 @@ import { IUserWithOutPassword } from '../users/dto/user-response.dto';
 import { LoginDTO } from './dto/login.dto';
 import type { AuthUser } from 'src/common/types/auth-user';
 import { JwtGuard } from 'src/common/guards/Jwt.guard';
+import { RecoverDTO } from './dto/recover.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -34,6 +35,14 @@ export class AuthController {
     return await this.authService.registerAsJobSeeker(dto);
   }
 
+  @Post('registration/admin')
+  @HttpCode(HttpStatus.CREATED)
+  async registerAsAdmin(
+    @Body() dto: CreateUserDTO,
+  ): Promise<IUserWithOutPassword> {
+    return this.authService.registerAsAdmin(dto);
+  }
+
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(
@@ -41,6 +50,15 @@ export class AuthController {
   ): Promise<{ message: string; token: string }> {
     const accessToken = await this.authService.login(dto);
     return { message: 'Login Successfully', token: accessToken };
+  }
+
+  @Post('recover')
+  @HttpCode(HttpStatus.CREATED)
+  async recoverAccount(
+    @Body() recoverDTO: RecoverDTO,
+  ): Promise<{ message: string }> {
+    await this.authService.recoverAccount(recoverDTO);
+    return { message: 'Recover Successfully, Try to login Again' };
   }
 
   @Post('logout')
