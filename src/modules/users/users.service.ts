@@ -1,16 +1,14 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Role, User } from 'src/generated/prisma/client';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { IUserWithOutPassword } from './dto/user-response.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { hashPassword } from 'src/common/helper/password-hasher';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class UsersService {
+  private logger = new Logger();
   constructor(private readonly prisma: PrismaService) {}
 
   async getAllRecruiters(): Promise<IUserWithOutPassword[]> {
@@ -78,6 +76,26 @@ export class UsersService {
       select: this.userSelectedFields,
     });
     return user;
+  }
+
+  // background jobs
+  @Cron('0 0 * * *')
+  async permanentlyDeleteSoftDeletedUsers() {
+    const THIRTY_DAYS_AGO = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+    const result = await this.prisma.user.deleteMany({
+      where: {
+        deletedAt: {
+          lte: THIRTY_DAYS_AGO,
+        },
+        isActive: false,
+      },
+    });
+    if (result.count > 0) {
+      this.logger.log(
+        `Permanently deleted ${result.count} user account(s) that were soft-deleted for over 30 days.`,
+      );
+    }
   }
 
   // for login only to compare password in dto to db password
