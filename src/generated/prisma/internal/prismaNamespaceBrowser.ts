@@ -108,7 +108,7 @@ export const ApplicationScalarFieldEnum = {
   userId: 'userId',
   jobId: 'jobId',
   status: 'status',
-  resumeLink: 'resumeLink',
+  resumePath: 'resumePath',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
