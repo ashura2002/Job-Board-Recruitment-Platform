@@ -18,15 +18,13 @@ import { Roles } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/generated/prisma/enums';
 import type { AuthUser } from 'src/common/types/auth-user';
 import { CreateApplicationDTO } from './dto/create-application.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { resumeUploadConfig } from 'src/config/file-upload.config';
+import { Application } from 'src/generated/prisma/client';
 
 @Controller('applications')
 @ApiBearerAuth('access-token')
 @UseGuards(JwtGuard, RolesGuard)
 export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}
-
 
   // understand the interceptor and the fileuploads
   @Post()
@@ -42,7 +40,7 @@ export class ApplicationsController {
   @Get('me')
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Jobseeker)
-  async getMyApplications(@Req() req: AuthUser): Promise<any> {
+  async getMyApplications(@Req() req: AuthUser): Promise<Application[]> {
     const { userId } = req.user;
     return await this.applicationsService.getMyApplications(userId);
   }
