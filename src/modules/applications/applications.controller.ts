@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -26,15 +27,23 @@ import { resumeUploadConfig } from 'src/config/file-upload.config';
 export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 
+
+  // understand the interceptor and the fileuploads
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Roles(Role.Jobseeker)
-  @UseInterceptors(FileInterceptor('resume', resumeUploadConfig()))
   async applyJob(
     @Req() req: AuthUser,
     @Body() dto: CreateApplicationDTO,
-    @UploadedFile() resume?: Express.Multer.File,
   ): Promise<any> {
     const { userId } = req.user;
+  }
+
+  @Get('me')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Jobseeker)
+  async getMyApplications(@Req() req: AuthUser): Promise<any> {
+    const { userId } = req.user;
+    return await this.applicationsService.getMyApplications(userId);
   }
 }
