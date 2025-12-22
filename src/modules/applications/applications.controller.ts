@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -17,8 +18,7 @@ import { Roles } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/generated/prisma/enums';
 import type { AuthUser } from 'src/common/types/auth-user';
 import { CreateApplicationDTO } from './dto/create-application.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { resumeUploadConfig } from 'src/config/file-upload.config';
+import { Application } from 'src/generated/prisma/client';
 
 @Controller('applications')
 @ApiBearerAuth('access-token')
@@ -26,15 +26,22 @@ import { resumeUploadConfig } from 'src/config/file-upload.config';
 export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 
+  // understand the interceptor and the fileuploads
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Roles(Role.Jobseeker)
-  @UseInterceptors(FileInterceptor('resume', resumeUploadConfig()))
   async applyJob(
     @Req() req: AuthUser,
     @Body() dto: CreateApplicationDTO,
-    @UploadedFile() resume?: Express.Multer.File,
   ): Promise<any> {
     const { userId } = req.user;
+  }
+
+  @Get('me')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Jobseeker)
+  async getMyApplications(@Req() req: AuthUser): Promise<Application[]> {
+    const { userId } = req.user;
+    return await this.applicationsService.getMyApplications(userId);
   }
 }
