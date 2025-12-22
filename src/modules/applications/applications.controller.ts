@@ -37,6 +37,8 @@ export class ApplicationsController {
     const { userId } = req.user;
   }
 
+
+  // jobseeker only
   @Get('me')
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Jobseeker)
