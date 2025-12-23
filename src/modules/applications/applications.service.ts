@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateApplicationDTO } from './dto/create-application.dto';
 import { Application } from 'src/generated/prisma/client';
+import * as fs from 'fs/promises';
 
 @Injectable()
 export class ApplicationsService {
@@ -12,6 +13,18 @@ export class ApplicationsService {
     dto: CreateApplicationDTO,
     resume: Express.Multer.File,
   ): Promise<Application> {
+    const existingApplication = await this.findExistingApplication(
+      userId,
+      dto.jobId,
+    );
+    if (existingApplication) {
+      // delete the upload pdf if the user got bad request
+      if (resume?.path) {
+        await fs.unlink(resume.path);
+      }
+      throw new BadRequestException('You have already applied to this job');
+    }
+
     const application = await this.prismaService.application.create({
       data: {
         userId,
@@ -30,4 +43,18 @@ export class ApplicationsService {
     return applications;
   }
 
+  async findExistingApplication(
+    userId: number,
+    jobId: number,
+  ): Promise<Application | null> {
+    const existing = await this.prismaService.application.findUnique({
+      where: {
+        userId_jobId: {
+          userId,
+          jobId,
+        },
+      },
+    });
+    return existing;
+  }
 }
