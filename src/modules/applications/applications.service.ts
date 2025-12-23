@@ -7,7 +7,20 @@ import { Application } from 'src/generated/prisma/client';
 export class ApplicationsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async applyJob(userId: number, dto: CreateApplicationDTO): Promise<any> {}
+  async applyJob(
+    userId: number,
+    dto: CreateApplicationDTO,
+    resume: Express.Multer.File,
+  ): Promise<Application> {
+    const application = await this.prismaService.application.create({
+      data: {
+        userId,
+        jobId: dto.jobId,
+        resumePath: resume.path,
+      },
+    });
+    return application;
+  }
 
   async getMyApplications(userId: number): Promise<Application[]> {
     const applications = await this.prismaService.application.findMany({
@@ -16,4 +29,5 @@ export class ApplicationsService {
     });
     return applications;
   }
+
 }
