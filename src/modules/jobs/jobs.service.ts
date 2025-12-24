@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -7,6 +8,7 @@ import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateJobDTO } from './dto/create-job.dto';
 import { Job } from 'src/generated/prisma/client';
 import { UpdateJobs } from './dto/update-job.dto';
+import { JobWithApplicants } from 'src/common/types/job-with-applicants.types';
 
 @Injectable()
 export class JobsService {
@@ -73,5 +75,32 @@ export class JobsService {
     });
     if (!job) throw new NotFoundException('Job not found');
     return job;
+  }
+
+  async getApplicantsForJob(
+    userId: number,
+    jobId: number,
+  ): Promise<JobWithApplicants[]> {
+    const job = await this.prismaService.job.findFirst({
+      where: { id: jobId, userId: userId },
+    });
+    if (!job)
+      throw new ForbiddenException(
+        'You are not allowed to view applications for this job',
+      );
+
+    const applicants = await this.prismaService.application.findMany({
+      where: { jobId: jobId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            fullname: true,
+          },
+        },
+      },
+    });
+    return applicants;
   }
 }
