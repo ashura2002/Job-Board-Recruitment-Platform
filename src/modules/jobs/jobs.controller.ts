@@ -21,9 +21,12 @@ import { Roles } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/generated/prisma/enums';
 import { Job } from 'src/generated/prisma/client';
 import { UpdateJobs } from './dto/update-job.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JobWithApplicants } from 'src/common/types/job-with-applicants.types';
 
 @Controller('jobs')
 @UseGuards(JwtGuard, RolesGuard)
+@ApiBearerAuth('access-token')
 export class JobsController {
   constructor(private readonly jobsService: JobsService) {}
 
@@ -97,5 +100,16 @@ export class JobsController {
   @HttpCode(HttpStatus.OK)
   async getJobById(@Param('jobId', ParseIntPipe) jobId: number): Promise<Job> {
     return await this.jobsService.findJobById(jobId);
+  }
+
+  @Get('applications/:jobId')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Recruiter)
+  async getApplicantsForJob(
+    @Req() req: AuthUser,
+    @Param('jobId', ParseIntPipe) jobId: number,
+  ): Promise<JobWithApplicants[]> {
+    const { userId } = req.user;
+    return await this.jobsService.getApplicantsForJob(userId, jobId);
   }
 }
