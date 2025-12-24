@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateApplicationDTO } from './dto/create-application.dto';
 import { Application } from 'src/generated/prisma/client';
@@ -35,12 +39,26 @@ export class ApplicationsService {
     return application;
   }
 
-  async getMyApplications(userId: number): Promise<Application[]> {
+  async getAllMyApplications(userId: number): Promise<Application[]> {
     const applications = await this.prismaService.application.findMany({
       where: { userId },
       include: { job: true },
     });
     return applications;
+  }
+
+  async getOneOfMyApplication(
+    applicationId: number,
+    userId: number,
+  ): Promise<Application> {
+    const application = await this.prismaService.application.findUnique({
+      where: { id: applicationId, userId: userId },
+      include: { job: true },
+    });
+    if (!application) throw new NotFoundException();
+    if (application.userId !== userId)
+      throw new BadRequestException(`You can only view your own application`);
+    return application;
   }
 
   async findExistingApplication(
