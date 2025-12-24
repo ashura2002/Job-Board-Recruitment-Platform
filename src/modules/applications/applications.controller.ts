@@ -4,6 +4,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
+  ParseIntPipe,
   Post,
   Req,
   UploadedFile,
@@ -46,8 +48,22 @@ export class ApplicationsController {
   @Get('me')
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Jobseeker)
-  async getMyApplications(@Req() req: AuthUser): Promise<Application[]> {
+  async getAllMyApplications(@Req() req: AuthUser): Promise<Application[]> {
     const { userId } = req.user;
-    return await this.applicationsService.getMyApplications(userId);
+    return await this.applicationsService.getAllMyApplications(userId);
+  }
+
+  @Get('me/:applicationId')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Jobseeker)
+  async getOneOfMyApplication(
+    @Param('applicationId', ParseIntPipe) applicationId: number,
+    @Req() req: AuthUser,
+  ): Promise<Application> {
+    const { userId } = req.user;
+    return await this.applicationsService.getOneOfMyApplication(
+      applicationId,
+      userId,
+    );
   }
 }
