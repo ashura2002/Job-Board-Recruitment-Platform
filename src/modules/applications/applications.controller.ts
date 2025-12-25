@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Req,
   UploadedFile,
@@ -23,6 +24,7 @@ import { CreateApplicationDTO } from './dto/create-application.dto';
 import { Application } from 'src/generated/prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { resumeUploadConfig } from 'src/config/file-upload.config';
+import { UpdateApplicationStatusDTO } from './dto/update-status.dto';
 
 @Controller('applications')
 @ApiBearerAuth('access-token')
@@ -63,6 +65,22 @@ export class ApplicationsController {
     const { userId } = req.user;
     return await this.applicationsService.getOneOfMyApplication(
       applicationId,
+      userId,
+    );
+  }
+
+  @Patch(':applicationId/status')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Recruiter)
+  async updateApplicationStatus(
+    @Param('applicationId', ParseIntPipe) applicationId: number,
+    @Body() updateDTO: UpdateApplicationStatusDTO,
+    @Req() req: AuthUser,
+  ): Promise<Application> {
+    const { userId } = req.user;
+    return await this.applicationsService.updateApplicationStatus(
+      applicationId,
+      updateDTO,
       userId,
     );
   }
