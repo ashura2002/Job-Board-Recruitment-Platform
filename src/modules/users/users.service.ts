@@ -98,6 +98,11 @@ export class UsersService {
     }
   }
 
+  async getCurrentUser(userId: number): Promise<IUserWithOutPassword> {
+    const user = await this.findById(userId);
+    return user;
+  }
+
   // for login only to compare password in dto to db password
   async findByUserName(username: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
