@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -7,6 +8,7 @@ import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateApplicationDTO } from './dto/create-application.dto';
 import { Application } from 'src/generated/prisma/client';
 import * as fs from 'fs/promises';
+import { UpdateApplicationStatusDTO } from './dto/update-status.dto';
 
 @Injectable()
 export class ApplicationsService {
@@ -74,5 +76,28 @@ export class ApplicationsService {
       },
     });
     return existing;
+  }
+
+  async updateApplicationStatus(
+    applicationId: number,
+    updateDTO: UpdateApplicationStatusDTO,
+    recruiterId: number,
+  ): Promise<Application> {
+    const application = await this.prismaService.application.findUnique({
+      where: { id: applicationId },
+      include: { job: true },
+    });
+    if (!application) throw new NotFoundException('Application not found');
+
+    // the id who create the job must the same on the recruiter id who want's to update the application
+    if (application.job.userId !== recruiterId)
+      throw new ForbiddenException(
+        'You are not allowed to update this application',
+      );
+
+    return this.prismaService.application.update({
+      where: { id: applicationId },
+      data: { status: updateDTO.status },
+    });
   }
 }
