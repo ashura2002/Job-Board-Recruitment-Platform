@@ -86,4 +86,11 @@ export class UsersController {
     await this.usersService.deleteOwnAccount(userId);
     return { message: 'Your account was soft deleted Successfully' };
   }
+
+  @Get('current')
+  @HttpCode(HttpStatus.OK)
+  async getCurrentUser(@Req() req: AuthUser): Promise<any> {
+    const { userId } = req.user;
+    return await this.usersService.getCurrentUser(userId);
+  }
 }
