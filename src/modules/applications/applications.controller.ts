@@ -84,4 +84,22 @@ export class ApplicationsController {
       userId,
     );
   }
+
+  @Patch(':applicationId/cancel')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Jobseeker)
+  async cancelMyJobApplication(
+    @Req() req: AuthUser,
+    @Param('applicationId', ParseIntPipe) applicationId: number,
+  ): Promise<{ message: string }> {
+    const { userId } = req.user;
+    await this.applicationsService.cancelMyJobApplication(
+      userId,
+      applicationId,
+    );
+    return { message: 'Job application cancelled successfully' };
+  }
 }
+
+//  to do
+// Recruiter: View applicants for a job (IMPORTANT)
