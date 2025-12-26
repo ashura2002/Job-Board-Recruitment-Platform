@@ -21,7 +21,8 @@ export type Role = (typeof Role)[keyof typeof Role]
 export const JobStatus = {
   Applied: 'Applied',
   Rejected: 'Rejected',
-  Hired: 'Hired'
+  Hired: 'Hired',
+  Cancelled: 'Cancelled'
 } as const
 
 export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]

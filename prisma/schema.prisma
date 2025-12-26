@@ -18,6 +18,7 @@ enum JobStatus {
   Applied
   Rejected
   Hired
+  Cancelled
 }
 
 model User {
