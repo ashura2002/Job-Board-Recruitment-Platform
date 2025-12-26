@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateApplicationDTO } from './dto/create-application.dto';
-import { Application } from 'src/generated/prisma/client';
+import { Application, JobStatus } from 'src/generated/prisma/client';
 import * as fs from 'fs/promises';
 import { UpdateApplicationStatusDTO } from './dto/update-status.dto';
 
@@ -98,6 +98,27 @@ export class ApplicationsService {
     return this.prismaService.application.update({
       where: { id: applicationId },
       data: { status: updateDTO.status },
+    });
+  }
+
+  async cancelMyJobApplication(
+    userId: number,
+    applicationId: number,
+  ): Promise<void> {
+    const application = await this.prismaService.application.findUnique({
+      where: { id: applicationId },
+    });
+    if (!application) throw new NotFoundException('Application not found');
+
+    if (application.userId !== userId)
+      throw new ForbiddenException('You can only cancel your own application');
+
+    if (application.status !== JobStatus.Applied)
+      throw new BadRequestException('Application can no longer be cancelled');
+
+    await this.prismaService.application.update({
+      where: { id: applicationId },
+      data: { status: JobStatus.Cancelled },
     });
   }
 }
