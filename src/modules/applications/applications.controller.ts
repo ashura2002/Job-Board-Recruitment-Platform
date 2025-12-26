@@ -100,6 +100,3 @@ export class ApplicationsController {
     return { message: 'Job application cancelled successfully' };
   }
 }
-
-//  to do
-// Recruiter: View applicants for a job (IMPORTANT)

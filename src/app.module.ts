@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { JobsModule } from './modules/jobs/jobs.module';
 import { ApplicationsModule } from './modules/applications/applications.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ApplicationsModule } from './modules/applications/applications.module';
     UsersModule,
     JobsModule,
     ApplicationsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
