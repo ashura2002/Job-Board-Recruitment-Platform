@@ -32,3 +32,8 @@ export type Job = Prisma.JobModel
  * 
  */
 export type Application = Prisma.ApplicationModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

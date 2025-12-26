@@ -38,6 +38,8 @@ model User {
   // One-to-many: user -> applications
   applications Application[] @relation("UserApplications")
 
+  notifications Notification[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -76,4 +78,16 @@ model Application {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, jobId])
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 }
