@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -98,5 +99,20 @@ export class ApplicationsController {
       applicationId,
     );
     return { message: 'Job application cancelled successfully' };
+  }
+
+  @Delete('me/:applicationId')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Jobseeker)
+  async deleteMyCancelledAndAppliedApplication(
+    @Req() req: AuthUser,
+    @Param('applicationId', ParseIntPipe) applicationId: number,
+  ): Promise<{ message: string }> {
+    const { userId } = req.user;
+    await this.applicationsService.deleteMyCancelledAndAppliedApplication(
+      userId,
+      applicationId,
+    );
+    return { message: 'Deleted Successfully' };
   }
 }
