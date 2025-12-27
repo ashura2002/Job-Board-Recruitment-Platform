@@ -121,4 +121,23 @@ export class ApplicationsService {
       data: { status: JobStatus.Cancelled },
     });
   }
+
+  async deleteMyCancelledAndAppliedApplication(
+    userId: number,
+    applicationId: number,
+  ): Promise<void> {
+    const application = await this.prismaService.application.findFirst({
+      where: { id: applicationId, userId },
+    });
+    if (!application) {
+      throw new NotFoundException('Application not found');
+    }
+    if (application.status === JobStatus.Hired)
+      throw new BadRequestException(
+        'You cannot delete an application that is already hired',
+      );
+    await this.prismaService.application.delete({
+      where: { id: applicationId },
+    });
+  }
 }
