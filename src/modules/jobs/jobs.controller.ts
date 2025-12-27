@@ -19,7 +19,7 @@ import { CreateJobDTO } from './dto/create-job.dto';
 import type { AuthUser } from 'src/common/types/auth-user';
 import { Roles } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/generated/prisma/enums';
-import { Job } from 'src/generated/prisma/client';
+import { Application, Job } from 'src/generated/prisma/client';
 import { UpdateJobs } from './dto/update-job.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JobWithApplicants } from 'src/common/types/job-with-applicants.types';
@@ -111,5 +111,21 @@ export class JobsController {
   ): Promise<JobWithApplicants[]> {
     const { userId } = req.user;
     return await this.jobsService.getApplicantsForJob(userId, jobId);
+  }
+
+  @Get('applications/:jobId/:applicationId')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Recruiter)
+  async getOneApplicantOnOwnApplicationList(
+    @Req() req: AuthUser,
+    @Param('jobId', ParseIntPipe) jobId: number,
+    @Param('applicationId', ParseIntPipe) applicationId: number,
+  ): Promise<Application> {
+    const { userId } = req.user;
+    return await this.jobsService.getOneApplicantOnOwnApplicationList(
+      userId,
+      jobId,
+      applicationId,
+    );
   }
 }
