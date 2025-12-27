@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateJobDTO } from './dto/create-job.dto';
-import { Job } from 'src/generated/prisma/client';
+import { Application, Job } from 'src/generated/prisma/client';
 import { UpdateJobs } from './dto/update-job.dto';
 import { JobWithApplicants } from 'src/common/types/job-with-applicants.types';
 
@@ -102,5 +102,35 @@ export class JobsService {
       },
     });
     return applicants;
+  }
+
+  async getOneApplicantOnOwnApplicationList(
+    userId: number,
+    jobId: number,
+    applicationId: number,
+  ): Promise<Application> {
+    const applications = await this.prismaService.application.findFirst({
+      where: {
+        id: applicationId,
+        jobId: jobId,
+        job: {
+          userId: userId,
+        },
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            fullname: true,
+          },
+        },
+      },
+    });
+    if (!applications)
+      throw new ForbiddenException(
+        'You are not allowed to view this application',
+      );
+    return applications;
   }
 }
