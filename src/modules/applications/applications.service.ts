@@ -9,16 +9,25 @@ import { CreateApplicationDTO } from './dto/create-application.dto';
 import { Application, JobStatus } from 'src/generated/prisma/client';
 import * as fs from 'fs/promises';
 import { UpdateApplicationStatusDTO } from './dto/update-status.dto';
+import { NotificationGateway } from '../notifications/notification.gateway';
+import { NotificationService } from '../notifications/notification.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ApplicationsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly notificationGateway: NotificationGateway,
+    private readonly notificationService: NotificationService,
+    private readonly userService: UsersService,
+  ) {}
 
   async applyJob(
     userId: number,
     dto: CreateApplicationDTO,
     resume: Express.Multer.File,
   ): Promise<Application> {
+    const currentUser = await this.userService.findById(userId);
     const existingApplication = await this.findExistingApplication(
       userId,
       dto.jobId,
@@ -31,6 +40,7 @@ export class ApplicationsService {
       throw new BadRequestException('You have already applied to this job');
     }
 
+    // to get the id of the owner of job
     const job = await this.prismaService.job.findUnique({
       where: { id: dto.jobId },
       include: { user: true },
@@ -43,6 +53,17 @@ export class ApplicationsService {
         resumePath: resume.path,
       },
     });
+
+    // notification to the owner of job
+    const message = `${currentUser.fullname} was applying to your job`;
+    await this.notificationService.createNotification(message, job.userId);
+
+    // for realtime update notification
+    this.notificationGateway.notifyUser(job.userId, {
+      message: 'You have a new notifications.',
+      date: new Date(),
+    });
+
     return application;
   }
 
