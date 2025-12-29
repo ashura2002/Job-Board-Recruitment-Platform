@@ -9,10 +9,16 @@ import { CreateApplicationDTO } from './dto/create-application.dto';
 import { Application, JobStatus } from 'src/generated/prisma/client';
 import * as fs from 'fs/promises';
 import { UpdateApplicationStatusDTO } from './dto/update-status.dto';
+import { NotificationGateway } from '../notifications/notification.gateway';
+import { NotificationService } from '../notifications/notification.service';
 
 @Injectable()
 export class ApplicationsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly notificationGateway: NotificationGateway,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   async applyJob(
     userId: number,
@@ -31,6 +37,11 @@ export class ApplicationsService {
       throw new BadRequestException('You have already applied to this job');
     }
 
+    const job = await this.prismaService.job.findUnique({
+      where: { id: dto.jobId },
+      include: { user: true },
+    });
+
     const application = await this.prismaService.application.create({
       data: {
         userId,
@@ -38,6 +49,11 @@ export class ApplicationsService {
         resumePath: resume.path,
       },
     });
+
+    // notification for the recruiter if the job seeker apply to there job
+    const message = 'A jobseeker applied to your job';
+    await this.notificationService.createNotification(message, job.userId);
+
     return application;
   }
 
