@@ -10,6 +10,6 @@ import { JwtModule } from '@nestjs/jwt';
   imports: [UsersModule, PrismaModule, JwtModule],
   controllers: [NotificationController],
   providers: [NotificationGateway, NotificationService],
-  exports: [NotificationGateway, NotificationService],
+  exports: [NotificationService],
 })
 export class NotificationsModule {}
