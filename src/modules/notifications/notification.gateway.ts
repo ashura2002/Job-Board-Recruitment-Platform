@@ -58,5 +58,3 @@ export class NotificationGateway
     this.server.to(`user-${userId}`).emit('notification', payload);
   }
 }
-// to do 
-// add a realtime notification update on the service for applications that change the job status to hired and reject 
