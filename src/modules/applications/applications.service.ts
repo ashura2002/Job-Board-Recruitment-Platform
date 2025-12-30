@@ -109,6 +109,7 @@ export class ApplicationsService {
     updateDTO: UpdateApplicationStatusDTO,
     recruiterId: number,
   ): Promise<Application> {
+    const currentUser = await this.userService.findById(recruiterId);
     const application = await this.prismaService.application.findUnique({
       where: { id: applicationId },
       include: { job: true },
@@ -120,6 +121,19 @@ export class ApplicationsService {
       throw new ForbiddenException(
         'You are not allowed to update this application',
       );
+
+    // notification for the jobseeker
+    const message = `${currentUser.fullname} was ${updateDTO.status} you in your job application`;
+    await this.notificationService.createNotification(
+      message,
+      application.userId,
+    );
+
+    // for realtime update
+    this.notificationGateway.notifyUser(application.userId, {
+      message: 'You have a new notification',
+      date: new Date(),
+    });
 
     return this.prismaService.application.update({
       where: { id: applicationId },
