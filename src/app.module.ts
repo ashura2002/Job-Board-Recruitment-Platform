@@ -9,6 +9,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { JobsModule } from './modules/jobs/jobs.module';
 import { ApplicationsModule } from './modules/applications/applications.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -16,6 +18,14 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
       isGlobal: true,
     }),
     ScheduleModule.forRoot(),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 30000, // time 30 seconds
+          limit: 10,
+        },
+      ],
+    }),
     AuthModule,
     PrismaModule,
     UsersModule,
@@ -24,6 +34,12 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     NotificationsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
