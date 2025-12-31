@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
@@ -12,9 +13,11 @@ import { UpdateApplicationStatusDTO } from './dto/update-status.dto';
 import { NotificationGateway } from '../notifications/notification.gateway';
 import { NotificationService } from '../notifications/notification.service';
 import { UsersService } from '../users/users.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class ApplicationsService {
+  private readonly logger = new Logger();
   constructor(
     private readonly prismaService: PrismaService,
     private readonly notificationGateway: NotificationGateway,
@@ -180,4 +183,29 @@ export class ApplicationsService {
       where: { id: applicationId },
     });
   }
+
+  // delete all the cancelled application every 7 days
+  @Cron(CronExpression.EVERY_WEEK)
+  async deleteCancelledApplicationEvery7days(): Promise<void> {
+    // set time to 7 days
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+    const deleted = await this.prismaService.application.deleteMany({
+      where: {
+        status: JobStatus.Cancelled,
+        updatedAt: {
+          lte: sevenDaysAgo,
+        },
+      },
+    });
+
+    if (deleted.count > 0) {
+      this.logger.log(
+        `Permanently deleted ${deleted.count} all cancelled applications after 7 days.`,
+      );
+    }
+  }
 }
+
+// to do -> 
+// create endpoint to get all my cancelled applications have options to delete
