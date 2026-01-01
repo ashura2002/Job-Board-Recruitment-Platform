@@ -70,6 +70,16 @@ export class ApplicationsController {
     );
   }
 
+  @Get('my-cancelled-applications')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Jobseeker)
+  async getAllMyCancelledApplications(
+    @Req() req: AuthUser,
+  ): Promise<Application[]> {
+    const { userId } = req.user;
+    return await this.applicationsService.getAllMyCancelledApplications(userId);
+  }
+
   @Patch(':applicationId/status')
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Recruiter)
