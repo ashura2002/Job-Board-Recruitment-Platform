@@ -205,7 +205,13 @@ export class ApplicationsService {
       );
     }
   }
-}
 
-// to do -> 
-// create endpoint to get all my cancelled applications have options to delete
+  async getAllMyCancelledApplications(userId: number): Promise<Application[]> {
+    const cancelledApplications = await this.prismaService.application.findMany(
+      {
+        where: { userId: userId, status: JobStatus.Cancelled },
+      },
+    );
+    return cancelledApplications;
+  }
+}
