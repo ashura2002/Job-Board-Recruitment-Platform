@@ -59,7 +59,12 @@ export class ApplicationsService {
 
     // notification to the owner of job
     const message = `${currentUser.fullname} was applying to your job`;
-    await this.notificationService.createNotification(message, job.userId);
+    await this.notificationService.createNotification(
+      {
+        message,
+      },
+      job.userId,
+    );
 
     // for realtime update notification
     this.notificationGateway.notifyUser(job.userId, {
@@ -128,7 +133,7 @@ export class ApplicationsService {
     // notification for the jobseeker
     const message = `${currentUser.fullname} was ${updateDTO.status} you in your job application`;
     await this.notificationService.createNotification(
-      message,
+      { message },
       application.userId,
     );
 
@@ -187,7 +192,7 @@ export class ApplicationsService {
   // delete all the cancelled application every 7 days
   @Cron(CronExpression.EVERY_WEEK)
   async deleteCancelledApplicationEvery7days(): Promise<void> {
-    // set time to 7 days
+    // set to 7 days
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
     const deleted = await this.prismaService.application.deleteMany({
