@@ -4,6 +4,9 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -14,6 +17,7 @@ import { JwtGuard } from 'src/common/guards/Jwt.guard';
 import { RolesGuard } from 'src/common/guards/role.guard';
 import type { AuthUser } from 'src/common/types/auth-user';
 import { Notification } from 'src/generated/prisma/client';
+import { CreateNotificationDTO } from './dto/create-notification.dto';
 
 @Controller('notifications')
 @ApiBearerAuth('access-token')
@@ -25,10 +29,10 @@ export class NotificationController {
   @HttpCode(HttpStatus.CREATED)
   async createNotification(
     @Req() req: AuthUser,
-    @Body() message: string,
+    @Body() dto: CreateNotificationDTO,
   ): Promise<Notification> {
     const { userId } = req.user;
-    return await this.notificationService.createNotification(message, userId);
+    return await this.notificationService.createNotification(dto, userId);
   }
 
   @Get()
@@ -36,5 +40,18 @@ export class NotificationController {
   async getNotifications(@Req() req: AuthUser): Promise<Notification[]> {
     const { userId } = req.user;
     return await this.notificationService.getNotifications(userId);
+  }
+
+  @Get(':notificationId')
+  @HttpCode(HttpStatus.OK)
+  async getOneNotification(
+    @Param('notificationId', ParseIntPipe) notificationId: number,
+    @Req() req: AuthUser,
+  ): Promise<any> {
+    const { userId } = req.user;
+    return await this.notificationService.getOneNotification(
+      notificationId,
+      userId,
+    );
   }
 }
