@@ -54,4 +54,15 @@ export class NotificationController {
       userId,
     );
   }
+
+  @Patch(':notificationId')
+  @HttpCode(HttpStatus.OK)
+  async markAsRead(
+    @Param('notificationId', ParseIntPipe) notificationId: number,
+    @Req() req: AuthUser,
+  ): Promise<{ message: string }> {
+    const { userId } = req.user;
+    await this.notificationService.markAsRead(notificationId, userId);
+    return { message: 'Mark as read successfully' };
+  }
 }
