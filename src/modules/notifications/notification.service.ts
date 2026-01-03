@@ -38,4 +38,12 @@ export class NotificationService {
     if (!notification) throw new NotFoundException('Notification not found');
     return notification;
   }
+
+  async markAsRead(notificationId: number, userId: number): Promise<void> {
+    const notification = await this.getOneNotification(notificationId, userId);
+    await this.prismaService.notification.update({
+      where: { id: notification.id },
+      data: { isRead: true },
+    });
+  }
 }
