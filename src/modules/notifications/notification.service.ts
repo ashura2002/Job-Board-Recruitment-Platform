@@ -46,4 +46,14 @@ export class NotificationService {
       data: { isRead: true },
     });
   }
+
+  async deleteNotification(
+    notificationId: number,
+    userId: number,
+  ): Promise<void> {
+    const notification = await this.getOneNotification(notificationId, userId);
+    await this.prismaService.notification.delete({
+      where: { id: notification.id },
+    });
+  }
 }
