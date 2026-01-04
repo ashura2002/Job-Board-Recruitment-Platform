@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -64,5 +65,16 @@ export class NotificationController {
     const { userId } = req.user;
     await this.notificationService.markAsRead(notificationId, userId);
     return { message: 'Mark as read successfully' };
+  }
+
+  @Delete(':notificationId')
+  @HttpCode(HttpStatus.OK)
+  async deleteNotification(
+    @Param('notificationId', ParseIntPipe) notificationId: number,
+    @Req() req: AuthUser,
+  ): Promise<{ message: string }> {
+    const { userId } = req.user;
+    await this.notificationService.deleteNotification(notificationId, userId);
+    return { message: 'Deleted Successfully' };
   }
 }
