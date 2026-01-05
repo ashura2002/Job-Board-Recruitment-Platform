@@ -14,6 +14,7 @@ import { LoginDTO } from './dto/login.dto';
 import type { AuthUser } from 'src/common/types/auth-user';
 import { JwtGuard } from 'src/common/guards/Jwt.guard';
 import { RecoverDTO } from './dto/recover.dto';
+import { CreateRecruiterDTO } from '../users/dto/create-recruiter.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +23,7 @@ export class AuthController {
   @Post('registration/recruiter')
   @HttpCode(HttpStatus.CREATED)
   async registerAsRecruiter(
-    @Body() dto: CreateUserDTO,
+    @Body() dto: CreateRecruiterDTO,
   ): Promise<IUserWithOutPassword> {
     return await this.authService.registerAsRecruiter(dto);
   }
@@ -33,14 +34,6 @@ export class AuthController {
     @Body() dto: CreateUserDTO,
   ): Promise<IUserWithOutPassword> {
     return await this.authService.registerAsJobSeeker(dto);
-  }
-
-  @Post('registration/admin')
-  @HttpCode(HttpStatus.CREATED)
-  async registerAsAdmin(
-    @Body() dto: CreateUserDTO,
-  ): Promise<IUserWithOutPassword> {
-    return this.authService.registerAsAdmin(dto);
   }
 
   @Post('login')
