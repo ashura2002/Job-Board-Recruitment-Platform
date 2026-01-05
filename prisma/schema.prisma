@@ -22,15 +22,16 @@ enum JobStatus {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  fullname  String
-  username  String    @unique
-  role      Role      @default(Jobseeker)
-  age       Int
-  isActive  Boolean   @default(false)
-  deletedAt DateTime?
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  password    String
+  fullname    String
+  username    String    @unique
+  role        Role      @default(Jobseeker)
+  age         Int
+  isActive    Boolean   @default(false)
+  companyName String?
+  deletedAt   DateTime?
 
   // One-to-many: recruiter -> jobs
   postedJobs Job[] @relation("RecruiterJobs")
@@ -89,5 +90,5 @@ model Notification {
   updatedAt DateTime @updatedAt
 
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
