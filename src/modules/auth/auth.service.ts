@@ -16,8 +16,8 @@ import { IUserWithOutPassword } from '../users/dto/user-response.dto';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDTO } from './dto/login.dto';
 import { IJwtResponse } from '../../common/types/jwt.types';
-import { hrtime } from 'process';
 import { RecoverDTO } from './dto/recover.dto';
+import { CreateRecruiterDTO } from '../users/dto/create-recruiter.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,16 +27,14 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async registerAsRecruiter(dto: CreateUserDTO): Promise<IUserWithOutPassword> {
+  async registerAsRecruiter(
+    dto: CreateRecruiterDTO,
+  ): Promise<IUserWithOutPassword> {
     return this.registerUserWithRole(dto, Role.Recruiter);
   }
 
   async registerAsJobSeeker(dto: CreateUserDTO): Promise<IUserWithOutPassword> {
     return this.registerUserWithRole(dto, Role.Jobseeker);
-  }
-
-  async registerAsAdmin(dto: CreateUserDTO) {
-    return this.registerUserWithRole(dto, Role.Admin);
   }
 
   async recoverAccount(recoverDTO: RecoverDTO): Promise<void> {
