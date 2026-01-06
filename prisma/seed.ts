@@ -1,9 +1,5 @@
 import * as bcrypt from 'bcrypt';
-
-// Use the generated Prisma client + enums (CommonJS to avoid ts-node / ESM issues)
 const { PrismaClient, Role } = require('../src/generated/prisma/client');
-
-// Prisma adapter for PostgreSQL (recommended for Prisma 5+)
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 
@@ -17,7 +13,7 @@ const prisma = new PrismaClient({ adapter });
 
 // Main seed logic (create only if data does not exist)
 async function main() {
-  const adminEmail = 'aizen@gmail.com';
+  const adminEmail = process.env.ADMIN_EMAIL;
 
   // Prevent duplicate seed data
   const existingAdmin = await prisma.user.findUnique({
@@ -29,14 +25,14 @@ async function main() {
     return;
   }
 
-  const hashedPassword = await bcrypt.hash('aizen2002', 10);
+  const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
 
   await prisma.user.create({
     data: {
       email: adminEmail,
       password: hashedPassword,
-      fullname: 'JMark Dayna',
-      username: 'aizen2002',
+      fullname: process.env.ADMIN_FULLNAME,
+      username: process.env.ADMIN_USERNAME,
       age: 23,
       role: Role.Admin,
     },
