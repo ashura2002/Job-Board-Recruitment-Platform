@@ -63,3 +63,7 @@ export class AuthController {
     return { message: 'Logout Successfully' };
   }
 }
+
+// to do
+// create a route in login for admin -> admin is seeded only no other way to create an admin on frontend
+// fix the admin seed error
