@@ -123,6 +123,7 @@ export class UsersService {
       createdAt: true,
       updatedAt: true,
       deletedAt: true,
+      companyName: true,
     };
   }
 }

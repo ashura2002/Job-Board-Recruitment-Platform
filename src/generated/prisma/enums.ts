@@ -26,3 +26,21 @@ export const JobStatus = {
 } as const
 
 export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]
+
+
+export const JobAvailability = {
+  Active: 'Active',
+  Closed: 'Closed'
+} as const
+
+export type JobAvailability = (typeof JobAvailability)[keyof typeof JobAvailability]
+
+
+export const scheduleType = {
+  FullTime: 'FullTime',
+  PartTime: 'PartTime',
+  Contract: 'Contract',
+  Remote: 'Remote'
+} as const
+
+export type scheduleType = (typeof scheduleType)[keyof typeof scheduleType]
