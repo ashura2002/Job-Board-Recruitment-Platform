@@ -33,7 +33,7 @@ export class JobsController {
   // recruiter
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @Roles(Role.Recruiter, Role.Admin)
+  @Roles(Role.Recruiter)
   async createJob(
     @Body() dto: CreateJobDTO,
     @Req() req: AuthUser,
