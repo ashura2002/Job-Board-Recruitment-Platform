@@ -49,13 +49,25 @@ export class JobsController {
     return await this.jobsService.getAllJobs();
   }
 
-  // Recruiters
+  // Recruiters all jobs created
   @Get('own-posted-jobs')
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Recruiter)
   async getAllOwnJobs(@Req() req: AuthUser): Promise<Job[]> {
     const { userId } = req.user;
     return await this.jobsService.getAllOwnJobs(userId);
+  }
+
+  // Recruiters get one all jobs created
+  @Get('own-posted-jobs/:jobId')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Recruiter)
+  async getOneOnMyOwnJobs(
+    @Param('jobId', ParseIntPipe) jobId: number,
+    @Req() req: AuthUser,
+  ): Promise<any> {
+    const { userId } = req.user;
+    return await this.jobsService.getOneOnMyOwnJobs(jobId, userId);
   }
 
   // recruiter
