@@ -134,3 +134,9 @@ export class JobsService {
     return applications;
   }
 }
+
+/*
+to do 
+job -> add active if that job still hiring , full time, part time ,contract or remote 
+user -> profile add skills
+*/

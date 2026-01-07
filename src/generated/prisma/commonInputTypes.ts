@@ -192,6 +192,40 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type EnumJobAvailabilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobAvailability | Prisma.EnumJobAvailabilityFieldRefInput<$PrismaModel>
+  in?: $Enums.JobAvailability[] | Prisma.ListEnumJobAvailabilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobAvailability[] | Prisma.ListEnumJobAvailabilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobAvailabilityFilter<$PrismaModel> | $Enums.JobAvailability
+}
+
+export type EnumscheduleTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.scheduleType | Prisma.EnumscheduleTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.scheduleType[] | Prisma.ListEnumscheduleTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.scheduleType[] | Prisma.ListEnumscheduleTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumscheduleTypeFilter<$PrismaModel> | $Enums.scheduleType
+}
+
+export type EnumJobAvailabilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobAvailability | Prisma.EnumJobAvailabilityFieldRefInput<$PrismaModel>
+  in?: $Enums.JobAvailability[] | Prisma.ListEnumJobAvailabilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobAvailability[] | Prisma.ListEnumJobAvailabilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobAvailabilityWithAggregatesFilter<$PrismaModel> | $Enums.JobAvailability
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumJobAvailabilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumJobAvailabilityFilter<$PrismaModel>
+}
+
+export type EnumscheduleTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.scheduleType | Prisma.EnumscheduleTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.scheduleType[] | Prisma.ListEnumscheduleTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.scheduleType[] | Prisma.ListEnumscheduleTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumscheduleTypeWithAggregatesFilter<$PrismaModel> | $Enums.scheduleType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumscheduleTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumscheduleTypeFilter<$PrismaModel>
+}
+
 export type EnumJobStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.JobStatus | Prisma.EnumJobStatusFieldRefInput<$PrismaModel>
   in?: $Enums.JobStatus[] | Prisma.ListEnumJobStatusFieldRefInput<$PrismaModel>
@@ -398,6 +432,40 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
+}
+
+export type NestedEnumJobAvailabilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobAvailability | Prisma.EnumJobAvailabilityFieldRefInput<$PrismaModel>
+  in?: $Enums.JobAvailability[] | Prisma.ListEnumJobAvailabilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobAvailability[] | Prisma.ListEnumJobAvailabilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobAvailabilityFilter<$PrismaModel> | $Enums.JobAvailability
+}
+
+export type NestedEnumscheduleTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.scheduleType | Prisma.EnumscheduleTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.scheduleType[] | Prisma.ListEnumscheduleTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.scheduleType[] | Prisma.ListEnumscheduleTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumscheduleTypeFilter<$PrismaModel> | $Enums.scheduleType
+}
+
+export type NestedEnumJobAvailabilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.JobAvailability | Prisma.EnumJobAvailabilityFieldRefInput<$PrismaModel>
+  in?: $Enums.JobAvailability[] | Prisma.ListEnumJobAvailabilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.JobAvailability[] | Prisma.ListEnumJobAvailabilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumJobAvailabilityWithAggregatesFilter<$PrismaModel> | $Enums.JobAvailability
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumJobAvailabilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumJobAvailabilityFilter<$PrismaModel>
+}
+
+export type NestedEnumscheduleTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.scheduleType | Prisma.EnumscheduleTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.scheduleType[] | Prisma.ListEnumscheduleTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.scheduleType[] | Prisma.ListEnumscheduleTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumscheduleTypeWithAggregatesFilter<$PrismaModel> | $Enums.scheduleType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumscheduleTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumscheduleTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumJobStatusFilter<$PrismaModel = never> = {
