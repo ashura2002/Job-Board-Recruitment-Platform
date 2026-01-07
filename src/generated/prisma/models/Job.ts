@@ -42,6 +42,8 @@ export type JobMinAggregateOutputType = {
   description: string | null
   location: string | null
   salaryRange: string | null
+  status: $Enums.JobAvailability | null
+  schedule: $Enums.scheduleType | null
   userId: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +55,8 @@ export type JobMaxAggregateOutputType = {
   description: string | null
   location: string | null
   salaryRange: string | null
+  status: $Enums.JobAvailability | null
+  schedule: $Enums.scheduleType | null
   userId: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -64,6 +68,8 @@ export type JobCountAggregateOutputType = {
   description: number
   location: number
   salaryRange: number
+  status: number
+  schedule: number
   userId: number
   createdAt: number
   updatedAt: number
@@ -87,6 +93,8 @@ export type JobMinAggregateInputType = {
   description?: true
   location?: true
   salaryRange?: true
+  status?: true
+  schedule?: true
   userId?: true
   createdAt?: true
   updatedAt?: true
@@ -98,6 +106,8 @@ export type JobMaxAggregateInputType = {
   description?: true
   location?: true
   salaryRange?: true
+  status?: true
+  schedule?: true
   userId?: true
   createdAt?: true
   updatedAt?: true
@@ -109,6 +119,8 @@ export type JobCountAggregateInputType = {
   description?: true
   location?: true
   salaryRange?: true
+  status?: true
+  schedule?: true
   userId?: true
   createdAt?: true
   updatedAt?: true
@@ -207,6 +219,8 @@ export type JobGroupByOutputType = {
   description: string
   location: string
   salaryRange: string
+  status: $Enums.JobAvailability
+  schedule: $Enums.scheduleType
   userId: number
   createdAt: Date
   updatedAt: Date
@@ -241,6 +255,8 @@ export type JobWhereInput = {
   description?: Prisma.StringFilter<"Job"> | string
   location?: Prisma.StringFilter<"Job"> | string
   salaryRange?: Prisma.StringFilter<"Job"> | string
+  status?: Prisma.EnumJobAvailabilityFilter<"Job"> | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFilter<"Job"> | $Enums.scheduleType
   userId?: Prisma.IntFilter<"Job"> | number
   createdAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Job"> | Date | string
@@ -254,6 +270,8 @@ export type JobOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
   salaryRange?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  schedule?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -270,6 +288,8 @@ export type JobWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"Job"> | string
   location?: Prisma.StringFilter<"Job"> | string
   salaryRange?: Prisma.StringFilter<"Job"> | string
+  status?: Prisma.EnumJobAvailabilityFilter<"Job"> | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFilter<"Job"> | $Enums.scheduleType
   userId?: Prisma.IntFilter<"Job"> | number
   createdAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Job"> | Date | string
@@ -283,6 +303,8 @@ export type JobOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
   salaryRange?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  schedule?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -302,6 +324,8 @@ export type JobScalarWhereWithAggregatesInput = {
   description?: Prisma.StringWithAggregatesFilter<"Job"> | string
   location?: Prisma.StringWithAggregatesFilter<"Job"> | string
   salaryRange?: Prisma.StringWithAggregatesFilter<"Job"> | string
+  status?: Prisma.EnumJobAvailabilityWithAggregatesFilter<"Job"> | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeWithAggregatesFilter<"Job"> | $Enums.scheduleType
   userId?: Prisma.IntWithAggregatesFilter<"Job"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Job"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Job"> | Date | string
@@ -312,6 +336,8 @@ export type JobCreateInput = {
   description: string
   location: string
   salaryRange: string
+  status?: $Enums.JobAvailability
+  schedule?: $Enums.scheduleType
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPostedJobsInput
@@ -324,6 +350,8 @@ export type JobUncheckedCreateInput = {
   description: string
   location: string
   salaryRange: string
+  status?: $Enums.JobAvailability
+  schedule?: $Enums.scheduleType
   userId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -335,6 +363,8 @@ export type JobUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
   salaryRange?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobAvailabilityFieldUpdateOperationsInput | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFieldUpdateOperationsInput | $Enums.scheduleType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPostedJobsNestedInput
@@ -347,6 +377,8 @@ export type JobUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
   salaryRange?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobAvailabilityFieldUpdateOperationsInput | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFieldUpdateOperationsInput | $Enums.scheduleType
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -359,6 +391,8 @@ export type JobCreateManyInput = {
   description: string
   location: string
   salaryRange: string
+  status?: $Enums.JobAvailability
+  schedule?: $Enums.scheduleType
   userId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -369,6 +403,8 @@ export type JobUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
   salaryRange?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobAvailabilityFieldUpdateOperationsInput | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFieldUpdateOperationsInput | $Enums.scheduleType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -379,6 +415,8 @@ export type JobUncheckedUpdateManyInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
   salaryRange?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobAvailabilityFieldUpdateOperationsInput | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFieldUpdateOperationsInput | $Enums.scheduleType
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -400,6 +438,8 @@ export type JobCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
   salaryRange?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  schedule?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -416,6 +456,8 @@ export type JobMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
   salaryRange?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  schedule?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -427,6 +469,8 @@ export type JobMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
   salaryRange?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  schedule?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -484,6 +528,14 @@ export type JobUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.JobScalarWhereInput | Prisma.JobScalarWhereInput[]
 }
 
+export type EnumJobAvailabilityFieldUpdateOperationsInput = {
+  set?: $Enums.JobAvailability
+}
+
+export type EnumscheduleTypeFieldUpdateOperationsInput = {
+  set?: $Enums.scheduleType
+}
+
 export type JobCreateNestedOneWithoutApplicationsInput = {
   create?: Prisma.XOR<Prisma.JobCreateWithoutApplicationsInput, Prisma.JobUncheckedCreateWithoutApplicationsInput>
   connectOrCreate?: Prisma.JobCreateOrConnectWithoutApplicationsInput
@@ -503,6 +555,8 @@ export type JobCreateWithoutUserInput = {
   description: string
   location: string
   salaryRange: string
+  status?: $Enums.JobAvailability
+  schedule?: $Enums.scheduleType
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationCreateNestedManyWithoutJobInput
@@ -514,6 +568,8 @@ export type JobUncheckedCreateWithoutUserInput = {
   description: string
   location: string
   salaryRange: string
+  status?: $Enums.JobAvailability
+  schedule?: $Enums.scheduleType
   createdAt?: Date | string
   updatedAt?: Date | string
   applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutJobInput
@@ -554,6 +610,8 @@ export type JobScalarWhereInput = {
   description?: Prisma.StringFilter<"Job"> | string
   location?: Prisma.StringFilter<"Job"> | string
   salaryRange?: Prisma.StringFilter<"Job"> | string
+  status?: Prisma.EnumJobAvailabilityFilter<"Job"> | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFilter<"Job"> | $Enums.scheduleType
   userId?: Prisma.IntFilter<"Job"> | number
   createdAt?: Prisma.DateTimeFilter<"Job"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Job"> | Date | string
@@ -564,6 +622,8 @@ export type JobCreateWithoutApplicationsInput = {
   description: string
   location: string
   salaryRange: string
+  status?: $Enums.JobAvailability
+  schedule?: $Enums.scheduleType
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPostedJobsInput
@@ -575,6 +635,8 @@ export type JobUncheckedCreateWithoutApplicationsInput = {
   description: string
   location: string
   salaryRange: string
+  status?: $Enums.JobAvailability
+  schedule?: $Enums.scheduleType
   userId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -601,6 +663,8 @@ export type JobUpdateWithoutApplicationsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
   salaryRange?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobAvailabilityFieldUpdateOperationsInput | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFieldUpdateOperationsInput | $Enums.scheduleType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPostedJobsNestedInput
@@ -612,6 +676,8 @@ export type JobUncheckedUpdateWithoutApplicationsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
   salaryRange?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobAvailabilityFieldUpdateOperationsInput | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFieldUpdateOperationsInput | $Enums.scheduleType
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -623,6 +689,8 @@ export type JobCreateManyUserInput = {
   description: string
   location: string
   salaryRange: string
+  status?: $Enums.JobAvailability
+  schedule?: $Enums.scheduleType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -632,6 +700,8 @@ export type JobUpdateWithoutUserInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
   salaryRange?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobAvailabilityFieldUpdateOperationsInput | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFieldUpdateOperationsInput | $Enums.scheduleType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUpdateManyWithoutJobNestedInput
@@ -643,6 +713,8 @@ export type JobUncheckedUpdateWithoutUserInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
   salaryRange?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobAvailabilityFieldUpdateOperationsInput | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFieldUpdateOperationsInput | $Enums.scheduleType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applications?: Prisma.ApplicationUncheckedUpdateManyWithoutJobNestedInput
@@ -654,6 +726,8 @@ export type JobUncheckedUpdateManyWithoutUserInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
   salaryRange?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobAvailabilityFieldUpdateOperationsInput | $Enums.JobAvailability
+  schedule?: Prisma.EnumscheduleTypeFieldUpdateOperationsInput | $Enums.scheduleType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -695,6 +769,8 @@ export type JobSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   description?: boolean
   location?: boolean
   salaryRange?: boolean
+  status?: boolean
+  schedule?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -709,6 +785,8 @@ export type JobSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   description?: boolean
   location?: boolean
   salaryRange?: boolean
+  status?: boolean
+  schedule?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -721,6 +799,8 @@ export type JobSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   description?: boolean
   location?: boolean
   salaryRange?: boolean
+  status?: boolean
+  schedule?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -733,12 +813,14 @@ export type JobSelectScalar = {
   description?: boolean
   location?: boolean
   salaryRange?: boolean
+  status?: boolean
+  schedule?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type JobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "location" | "salaryRange" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["job"]>
+export type JobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "location" | "salaryRange" | "status" | "schedule" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["job"]>
 export type JobInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   applications?: boolean | Prisma.Job$applicationsArgs<ExtArgs>
@@ -763,6 +845,8 @@ export type $JobPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     description: string
     location: string
     salaryRange: string
+    status: $Enums.JobAvailability
+    schedule: $Enums.scheduleType
     userId: number
     createdAt: Date
     updatedAt: Date
@@ -1196,6 +1280,8 @@ export interface JobFieldRefs {
   readonly description: Prisma.FieldRef<"Job", 'String'>
   readonly location: Prisma.FieldRef<"Job", 'String'>
   readonly salaryRange: Prisma.FieldRef<"Job", 'String'>
+  readonly status: Prisma.FieldRef<"Job", 'JobAvailability'>
+  readonly schedule: Prisma.FieldRef<"Job", 'scheduleType'>
   readonly userId: Prisma.FieldRef<"Job", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Job", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Job", 'DateTime'>

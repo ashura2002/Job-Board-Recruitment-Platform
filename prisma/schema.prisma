@@ -21,6 +21,18 @@ enum JobStatus {
   Cancelled
 }
 
+enum JobAvailability {
+  Active
+  Closed
+}
+
+enum scheduleType {
+  FullTime
+  PartTime
+  Contract
+  Remote
+}
+
 model User {
   id          Int       @id @default(autoincrement())
   email       String    @unique
@@ -46,11 +58,13 @@ model User {
 }
 
 model Job {
-  id          Int    @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   title       String
   description String
   location    String
   salaryRange String
+  status      JobAvailability @default(Active)
+  schedule    scheduleType    @default(FullTime)
 
   // Recruiter relation
   userId Int
