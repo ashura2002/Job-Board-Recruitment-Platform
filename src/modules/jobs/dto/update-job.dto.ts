@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
+import { JobAvailability, scheduleType } from 'src/generated/prisma/enums';
 
 export class UpdateJobs {
   @ApiProperty()
@@ -17,4 +18,14 @@ export class UpdateJobs {
   @ApiProperty()
   @IsNotEmpty()
   salaryRange: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsEnum(scheduleType)
+  schedule: scheduleType;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsEnum(JobAvailability)
+  status: JobAvailability;
 }

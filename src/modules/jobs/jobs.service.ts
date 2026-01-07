@@ -31,8 +31,26 @@ export class JobsService {
     return jobs;
   }
 
+  async getOneOnMyOwnJobs(jobId: number, userId: number): Promise<Job> {
+    const job = await this.prismaService.job.findFirst({
+      where: { id: jobId, userId },
+    });
+    if (!job) throw new NotFoundException('Job not found');
+    return job;
+  }
+
   async getAllJobs(): Promise<Job[]> {
-    const jobs = await this.prismaService.job.findMany();
+    const jobs = await this.prismaService.job.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            fullname: true,
+          },
+        },
+      },
+    });
     return jobs;
   }
 
@@ -72,6 +90,7 @@ export class JobsService {
   async findJobById(jobId: number): Promise<Job> {
     const job = await this.prismaService.job.findUnique({
       where: { id: jobId },
+      include: { user: { select: { id: true, email: true, fullname: true } } },
     });
     if (!job) throw new NotFoundException('Job not found');
     return job;
@@ -137,6 +156,5 @@ export class JobsService {
 
 /*
 to do 
-job -> add active if that job still hiring , full time, part time ,contract or remote 
 user -> profile add skills
 */
