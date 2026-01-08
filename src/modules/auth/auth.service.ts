@@ -92,7 +92,10 @@ export class AuthService {
     dto: CreateUserDTO,
     role: Role,
   ): Promise<IUserWithOutPassword> {
-    const { email, password } = dto;
+    const { email, password, username } = dto;
+    const existingUsername = await this.userService.findByUserName(username);
+    if (existingUsername)
+      throw new ConflictException(`${username} is already in used.`);
     const existingEmail = await this.userService.findUserbyEmail(email);
     if (existingEmail) throw new ConflictException('Email is already in used.');
     const hash = await hashPassword(password);
