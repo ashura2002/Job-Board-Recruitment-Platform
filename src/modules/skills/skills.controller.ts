@@ -1,9 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
+  ParseIntPipe,
   Post,
   Req,
   UseGuards,
@@ -39,5 +42,25 @@ export class SkillsController {
   @HttpCode(HttpStatus.OK)
   async getAllSkills(): Promise<Skill[]> {
     return await this.skillsService.getAllSkills();
+  }
+
+  @Get('details/:skillId')
+  @HttpCode(HttpStatus.OK)
+  async getSkillbyId(
+    @Param('skillId', ParseIntPipe) skillId: number,
+  ): Promise<Skill> {
+    return await this.skillsService.getSkillbyId(skillId);
+  }
+
+  @Delete(':skillId')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Admin, Role.Recruiter)
+  async deleteSkill(
+    @Param('skillId', ParseIntPipe) skillId: number,
+    @Req() req: AuthUser,
+  ): Promise<{ message: string }> {
+    const { userId } = req.user;
+    await this.skillsService.deleteSkill(skillId, userId);
+    return { message: `Skill deleted successfully` };
   }
 }
