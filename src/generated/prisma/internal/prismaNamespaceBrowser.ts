@@ -54,7 +54,8 @@ export const ModelName = {
   User: 'User',
   Job: 'Job',
   Application: 'Application',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  Skill: 'Skill'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -130,6 +131,15 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const SkillScalarFieldEnum = {
+  id: 'id',
+  skillName: 'skillName',
+  userId: 'userId'
+} as const
+
+export type SkillScalarFieldEnum = (typeof SkillScalarFieldEnum)[keyof typeof SkillScalarFieldEnum]
 
 
 export const SortOrder = {
