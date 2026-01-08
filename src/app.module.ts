@@ -11,6 +11,7 @@ import { ApplicationsModule } from './modules/applications/applications.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { SkillsModule } from './modules/skills/skills.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { APP_GUARD } from '@nestjs/core';
     JobsModule,
     ApplicationsModule,
     NotificationsModule,
+    SkillsModule,
   ],
   controllers: [AppController],
   providers: [

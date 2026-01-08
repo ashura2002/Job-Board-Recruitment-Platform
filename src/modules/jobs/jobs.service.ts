@@ -154,7 +154,4 @@ export class JobsService {
   }
 }
 
-/*
-to do 
-user -> profile add skills
-*/
+
