@@ -53,6 +53,8 @@ model User {
 
   notifications Notification[]
 
+  skills Skill[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -105,4 +107,11 @@ model Notification {
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Skill {
+  id        Int    @id @default(autoincrement())
+  skillName String @unique
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int
 }
