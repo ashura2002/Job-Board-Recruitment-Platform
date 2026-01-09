@@ -89,7 +89,7 @@ export class UsersController {
 
   @Get('current')
   @HttpCode(HttpStatus.OK)
-  async getCurrentUser(@Req() req: AuthUser): Promise<any> {
+  async getCurrentUser(@Req() req: AuthUser): Promise<IUserWithOutPassword> {
     const { userId } = req.user;
     return await this.usersService.getCurrentUser(userId);
   }

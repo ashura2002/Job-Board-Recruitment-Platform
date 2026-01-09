@@ -13,9 +13,15 @@ export class SkillsService {
 
   async createSkill(dto: CreateSkillDTO, userId: number): Promise<Skill> {
     const { skillName } = dto;
-    const existingSkill = await this.getOneSkillByName(skillName);
-    if (existingSkill)
-      throw new BadRequestException(`${skillName} already exists`);
+    const mySkillSet = await this.getAllMySkills(userId);
+    const alreadyExist = mySkillSet.some(
+      (skill: Skill) => skill.skillName === skillName,
+    );
+
+    if (alreadyExist)
+      throw new BadRequestException(
+        `${skillName} was already on your skill set`,
+      );
 
     const skill = await this.prismaService.skill.create({
       data: {
@@ -26,30 +32,16 @@ export class SkillsService {
     return skill;
   }
 
-  async getAllSkills(): Promise<Skill[]> {
-    const skills = await this.prismaService.skill.findMany();
-    return skills;
-  }
-
-  private async getOneSkillByName(skillName: string): Promise<Skill | null> {
-    const skill = await this.prismaService.skill.findUnique({
-      where: { skillName: skillName },
+  async getAllMySkills(userId: number): Promise<Skill[]> {
+    const skills = await this.prismaService.skill.findMany({
+      where: { userId },
     });
-    return skill;
+    return skills;
   }
 
   async getSkillbyId(skillId: number): Promise<Skill> {
     const skill = await this.prismaService.skill.findUnique({
       where: { id: skillId },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            fullname: true,
-          },
-        },
-      },
     });
     if (!skill) throw new NotFoundException('Skill not found');
     return skill;
@@ -65,11 +57,3 @@ export class SkillsService {
     });
   }
 }
-
-/*
-to do 
-user -> profile add skills
-test the ownership of deleting skill
-create another recruiter to test
-user probably and array of skill or none
-*/
