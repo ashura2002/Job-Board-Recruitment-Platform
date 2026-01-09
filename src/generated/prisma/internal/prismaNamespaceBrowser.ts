@@ -136,7 +136,9 @@ export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[k
 export const SkillScalarFieldEnum = {
   id: 'id',
   skillName: 'skillName',
-  userId: 'userId'
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type SkillScalarFieldEnum = (typeof SkillScalarFieldEnum)[keyof typeof SkillScalarFieldEnum]
