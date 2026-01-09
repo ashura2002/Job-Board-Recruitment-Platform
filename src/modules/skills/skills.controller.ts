@@ -29,7 +29,7 @@ export class SkillsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @Roles(Role.Recruiter, Role.Admin)
+  @Roles(Role.Jobseeker)
   async createSkill(
     @Body() dto: CreateSkillDTO,
     @Req() req: AuthUser,
@@ -38,10 +38,12 @@ export class SkillsController {
     return await this.skillsService.createSkill(dto, userId);
   }
 
-  @Get()
+  // endpoints for get all my skills for job seekers
+  @Get('own')
   @HttpCode(HttpStatus.OK)
-  async getAllSkills(): Promise<Skill[]> {
-    return await this.skillsService.getAllSkills();
+  async getAllMySkills(@Req() req: AuthUser): Promise<Skill[]> {
+    const { userId } = req.user;
+    return await this.skillsService.getAllMySkills(userId);
   }
 
   @Get('details/:skillId')
