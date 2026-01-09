@@ -6,6 +6,7 @@ import {
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateSkillDTO } from './dto/create-skill.dto';
 import { Skill } from 'src/generated/prisma/client';
+import { UpdateSkillDTO } from './dto/update-skill.dto';
 
 @Injectable()
 export class SkillsService {
@@ -39,9 +40,9 @@ export class SkillsService {
     return skills;
   }
 
-  async getSkillbyId(skillId: number): Promise<Skill> {
-    const skill = await this.prismaService.skill.findUnique({
-      where: { id: skillId },
+  async getSkillbyId(skillId: number, userId: number): Promise<Skill> {
+    const skill = await this.prismaService.skill.findFirst({
+      where: { id: skillId, userId },
     });
     if (!skill) throw new NotFoundException('Skill not found');
     return skill;
@@ -54,6 +55,24 @@ export class SkillsService {
     if (!skill) throw new NotFoundException('Skill not found');
     await this.prismaService.skill.delete({
       where: { id: skill.id },
+    });
+  }
+
+  async updateSkillName(
+    skillId: number,
+    userId: number,
+    dto: UpdateSkillDTO,
+  ): Promise<void> {
+    const { skillName } = dto;
+    const skill = await this.prismaService.skill.findFirst({
+      where: { id: skillId, userId },
+    });
+    if (!skill) throw new NotFoundException('Skill not found');
+    await this.prismaService.skill.update({
+      where: { id: skill.id },
+      data: {
+        skillName,
+      },
     });
   }
 }

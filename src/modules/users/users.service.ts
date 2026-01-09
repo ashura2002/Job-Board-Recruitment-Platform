@@ -135,9 +135,11 @@ export class UsersService {
 to do 
 user -> skills
 user probably and array of skill or none
-think better design for adding skill if every user can create there own skill
-maybe in job the skill set needed will be listed on job description
-maybe add a created at and updated at on skill model - done 
+the skill set needed will be listed on job description
+add a created at and updated at on skill model - done 
 block the creation of duplcate skill on every user - done
-add update method for skill
+add update method for skill - done
+get all skill by admin
+get skill by id for admin
+if user get own details skill must include  and if uer stalk another user skill must shown
 */
