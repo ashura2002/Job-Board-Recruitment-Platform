@@ -75,4 +75,9 @@ export class SkillsService {
       },
     });
   }
+
+  async getAllSKillsByAdmin(): Promise<Skill[]> {
+    const skills = await this.prismaService.skill.findMany();
+    return skills;
+  }
 }
