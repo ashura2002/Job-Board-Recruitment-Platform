@@ -61,6 +61,14 @@ export class SkillsController {
     return await this.skillsService.getSkillbyId(skillId, userId);
   }
 
+  // admin can see all the skills, can delete but can't edit
+  @Get('admin')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Admin)
+  async getAllSKillsByAdmin(): Promise<Skill[]> {
+    return await this.skillsService.getAllSKillsByAdmin();
+  }
+
   // admin can delete skills too
   @Delete(':skillId')
   @HttpCode(HttpStatus.OK)
