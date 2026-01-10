@@ -142,4 +142,5 @@ add update method for skill - done
 get all skill by admin
 get skill by id for admin
 if user get own details skill must include  and if uer stalk another user skill must shown
+query string the job search
 */
