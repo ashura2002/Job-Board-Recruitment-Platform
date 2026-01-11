@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -139,5 +140,11 @@ export class JobsController {
       jobId,
       applicationId,
     );
+  }
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async searchForJobName(@Query('query') query: string): Promise<Job[]> {
+    return await this.jobsService.searchForJobName(query);
   }
 }
