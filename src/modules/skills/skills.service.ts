@@ -80,4 +80,21 @@ export class SkillsService {
     const skills = await this.prismaService.skill.findMany();
     return skills;
   }
+
+  async getSkillByIDByAdmin(skillId: number): Promise<Skill> {
+    const skill = await this.prismaService.skill.findUnique({
+      where: { id: skillId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            fullname: true,
+            email: true,
+          },
+        },
+      },
+    });
+    if (!skill) throw new NotFoundException('Skill not found');
+    return skill;
+  }
 }

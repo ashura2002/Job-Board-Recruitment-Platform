@@ -61,12 +61,22 @@ export class SkillsController {
     return await this.skillsService.getSkillbyId(skillId, userId);
   }
 
-  // admin can see all the skills, can delete but can't edit
+  // admin can see all the skills, can delete but can't edit - need server side pagination
   @Get('admin')
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Admin)
   async getAllSKillsByAdmin(): Promise<Skill[]> {
     return await this.skillsService.getAllSKillsByAdmin();
+  }
+
+  // admin can get one skill of any jobseekers
+  @Get('admin/:skillId')
+  @HttpCode(HttpStatus.OK)
+  @Roles(Role.Admin)
+  async getSkillByIDByAdmin(
+    @Param('skillId', ParseIntPipe) skillId: number,
+  ): Promise<Skill> {
+    return await this.skillsService.getSkillByIDByAdmin(skillId);
   }
 
   // admin can delete skills too

@@ -134,13 +134,13 @@ export class UsersService {
 /*
 to do 
 user -> skills
-user probably and array of skill or none
-the skill set needed will be listed on job description
+user probably and array of skill or none - done
+the skill set needed will be listed on job description - done
 add a created at and updated at on skill model - done 
 block the creation of duplcate skill on every user - done
 add update method for skill - done
-get all skill by admin
-get skill by id for admin
-if user get own details skill must include  and if uer stalk another user skill must shown
+get all skill by admin - done 
+get skill by id for admin - done
 query string the job search
+add pagination on get all methods
 */
