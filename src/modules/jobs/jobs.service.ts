@@ -152,6 +152,11 @@ export class JobsService {
       );
     return applications;
   }
+
+  async searchForJobName(jobName: string): Promise<Job[]> {
+    const jobs = await this.prismaService.job.findMany({
+      where: { title: jobName },
+    });
+    return jobs;
+  }
 }
-
-

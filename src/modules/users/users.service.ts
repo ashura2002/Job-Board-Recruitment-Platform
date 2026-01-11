@@ -142,5 +142,7 @@ add update method for skill - done
 get all skill by admin - done 
 get skill by id for admin - done
 query string the job search
+test the query string create a new job then query it by searchForJobName method
 add pagination on get all methods
+if user was hired then the company was not null for that user
 */
