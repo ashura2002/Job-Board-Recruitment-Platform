@@ -142,7 +142,7 @@ export class JobsController {
     );
   }
 
-  @Get()
+  @Get('search')
   @HttpCode(HttpStatus.OK)
   async searchForJobName(@Query('query') query: string): Promise<Job[]> {
     return await this.jobsService.searchForJobName(query);
