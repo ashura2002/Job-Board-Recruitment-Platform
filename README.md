@@ -11,14 +11,15 @@ Skill management
 Real-time notifications (WebSocket)
 Role-based access control (Jobseeker, Recruiter, Admin)
 
-Technology   Stack
-Technology	  Purpose
-Node.js	      Runtime environment
-NestJS	      Backend framework
-TypeScript	  Programming language
-PostgreSQL	  Relational database
-Prisma	      ORM for database operations
-WebSocket	    Real-time notifications
+| Technology   | Purpose |
+|-------------|--------|
+| Node.js | Runtime environment |
+| NestJS | Backend framework |
+| TypeScript | Programming language |
+| PostgreSQL | Relational database |
+| Prisma | ORM for database operations |
+| WebSocket | Real-time notifications |
+
 
 API Modules
 
@@ -116,11 +117,12 @@ This API uses JWT (JSON Web Token) authentication.
 Include the token in the request header: Authorization: Bearer {{accessToken}}
 
 
-User Roles
-Role	      Description                    	  Access Level
-Jobseeker	  Users looking for employment	    Apply for jobs, manage skills
-Recruiter	  Users posting job opportunities	  Manage jobs & applications
-Admin	      Platform administrators	          Full system access
+| Role | Description | Access Level |
+|-----|------------|-------------|
+| Jobseeker | Users looking for employment | Apply for jobs, manage skills |
+| Recruiter | Users posting job opportunities | Create & manage jobs, review applications |
+| Admin | Platform administrators | Full system access |
+
 
 
 Database
