@@ -1,137 +1,163 @@
 Job Board API
-A comprehensive RESTful API for a job board platform that connects jobseekers with recruiters. This API supports user authentication, job postings, applications management, skill tracking, and real-time notifications.
 
-TECHNOLOGY   PURPOSE
-Node.js    -  Runtime environment
-NestJs     - Backend Framework
-TypeScript  -  Programming language 
-PostgreSQL - Relational database
-Prisma - ORM for database operations 
-WebSocket - Real-time notifications
+A comprehensive RESTful API for a job board platform that connects jobseekers with recruiters.
+It supports user authentication, job postings, application management, skill tracking, and real-time notifications.
+
+🚀 Features
+JWT-based authentication
+Job posting and search
+Job application workflow
+Skill management
+Real-time notifications (WebSocket)
+Role-based access control (Jobseeker, Recruiter, Admin)
+
+Technology   Stack
+Technology	  Purpose
+Node.js	      Runtime environment
+NestJS	      Backend framework
+TypeScript	  Programming language
+PostgreSQL	  Relational database
+Prisma	      ORM for database operations
+WebSocket	    Real-time notifications
 
 API Modules
-🔐 USERS
-Handles all user-related operations including authentication and account management.
-Authentication Endpoints:
-POST /auth/registration/jobseeker - Register as a jobseeker
-POST /auth/registration/recruiter - Register as a recruiter
-POST /auth/registration/admin - Register as an admin
-POST /auth/login - User login (returns JWT token)
-POST /auth/logout - User logout
-POST /auth/recover - Account recovery
 
-User Management:
-GET /users/current - Get current authenticated user
-PUT /users/own-details - Update own profile details
-DELETE /users/own - Delete own account
-
-Admin Operations:
-GET /users/admin/jobseekers - Get all jobseekers
-GET /users/admin/recruiters - Get all recruiters
-GET /users/admin/{id} - Get user by ID
-DELETE /users/admin/{id} - Delete user by ID
-GET /users/admin/deleted-account - View all deleted accounts
-
-
-
-
-💼 JOBS
-Manages job postings, searches, and recruiter-specific operations.
-Public Endpoints:
-GET /jobs - Get all available jobs
-GET /jobs/job-details/{id} - Get job details by ID
-GET /jobs/search?query={keyword} - Search jobs by keyword
-
-Recruiter Operations:
-POST /jobs - Create a new job posting
-GET /jobs/own-posted-jobs - Get all own posted jobs
-GET /jobs/own-posted-jobs/{id} - Get specific own posted job
-PATCH /jobs/own-posted-jobs/{id} - Update own posted job
-DELETE /jobs/own-posted-jobs/{id} - Delete own posted job
-
-Applicant Management:
-GET /jobs/applications/{jobId} - Get all applicants for a job
-GET /jobs/applications/{jobId}/{applicationId} - Get specific applicant
-
-Admin Operations:
-DELETE /jobs/admin/{id} - Delete any job posting
-
-
-
-
-📝 APPLICATIONS
-Handles the job application workflow for jobseekers and recruiters.
-Jobseeker Operations:
-POST /applications - Apply for a job
-GET /applications/me - Get all own applications
-GET /applications/me/{id} - Get specific application
-PATCH /applications/{id}/cancel - Cancel application
-DELETE /applications/me/{id} - Delete unhired application
-GET /applications/my-cancelled-applications - View cancelled applications
-
-Recruiter Operations:
-PATCH /applications/{id}/status - Update application status (accept/reject)
-
-
-
-
-🔔 NOTIFICATIONS
-Real-time notification system with WebSocket support.
-REST Endpoints:
-POST /notifications - Create notification
-GET /notifications - Get all notifications
-GET /notifications/{id} - Get specific notification
-PATCH /notifications/{id} - Mark as read
-DELETE /notifications/{id} - Delete notification
-
-WebSocket Events:
-notification:new - New notification received
-notification:read - Notification marked as read
-
-
-🎯 SKILLS
-Skill management for jobseeker profiles.
-Jobseeker Operations:
-POST /skills - Add a new skill
-GET /skills/own - Get all own skills
-GET /skills/details/{id} - Get skill by ID
-PUT /skills/{id} - Update skill
-DELETE /skills/{id} - Delete skill
-
-Admin Operations:
-GET /skills/admin - Get all skills (platform-wide)
-GET /skills/admin/{id} - Get any skill by ID
+Users & Authentication
+Handles authentication, user management, and admin operations.
 
 Authentication
-This API uses JWT (JSON Web Token) for authentication. After successful login, include the token in the Authorization header:
-Authorization: Bearer {{accessToken}}
+POST /auth/registration/jobseeker
+POST /auth/registration/recruiter
+POST /auth/registration/admin
+POST /auth/login
+POST /auth/logout
+POST /auth/recover
+
+User Management
+GET    /users/current
+PUT    /users/own-details
+DELETE /users/own
+
+Admin Operations
+GET    /users/admin/jobseekers
+GET    /users/admin/recruiters
+GET    /users/admin/{id}
+DELETE /users/admin/{id}
+GET    /users/admin/deleted-account
+
+Jobs
+Manages job postings, search, and recruiter operations.
+
+Public Endpoints
+GET /jobs
+GET /jobs/job-details/{id}
+GET /jobs/search?query={keyword}
+
+Recruiter Operations
+POST   /jobs
+GET    /jobs/own-posted-jobs
+GET    /jobs/own-posted-jobs/{id}
+PATCH  /jobs/own-posted-jobs/{id}
+DELETE /jobs/own-posted-jobs/{id}
+
+Applicant Management
+GET /jobs/applications/{jobId}
+GET /jobs/applications/{jobId}/{applicationId}
+
+Admin Operations
+DELETE /jobs/admin/{id}
+
+Applications
+Handles the job application lifecycle.
+
+Jobseeker Operations
+POST   /applications
+GET    /applications/me
+GET    /applications/me/{id}
+PATCH  /applications/{id}/cancel
+DELETE /applications/me/{id}
+GET    /applications/my-cancelled-applications
+
+Recruiter Operations
+PATCH /applications/{id}/status
+
+Notifications
+Real-time notification system using WebSocket.
+
+REST Endpoints
+POST   /notifications
+GET    /notifications
+GET    /notifications/{id}
+PATCH  /notifications/{id}
+DELETE /notifications/{id}
+
+WebSocket Events
+notification:new   → New notification received
+notification:read  → Notification marked as read
+
+
+Skills
+Manages jobseeker skills.
+
+Jobseeker Operations
+POST   /skills
+GET    /skills/own
+GET    /skills/details/{id}
+PUT    /skills/{id}
+DELETE /skills/{id}
+
+Admin Operations
+GET /skills/admin
+GET /skills/admin/{id}
+
+
+Authentication
+This API uses JWT (JSON Web Token) authentication.
+Include the token in the request header: Authorization: Bearer {{accessToken}}
+
 
 User Roles
-ROLES       DESCRIPTIONS                   Access Level
-Jobseeker - Users looking for employment - Users looking for employment
-Recruiter - Users posting job opportunities - Create/manage job postings, review applications, update statuses
-Admin - Platform administrators - Full access to all users, jobs, and platform data
+Role	      Description                    	  Access Level
+Jobseeker	  Users looking for employment	    Apply for jobs, manage skills
+Recruiter	  Users posting job opportunities	  Manage jobs & applications
+Admin	      Platform administrators	          Full system access
+
 
 Database
-PostgreSQL + Prisma
-This API leverages PostgreSQL as the relational database with Prisma ORM for type-safe database operations.
-Key Features:
-Type Safety - Prisma generates TypeScript types from your database schema
-Migrations - Version-controlled database schema changes
-Relations - Easy handling of one-to-many and many-to-many relationships
-
-Core Entities:
-User - Stores user accounts with role differentiation
-Job - Job postings created by recruiters
-Application - Links jobseekers to jobs with status tracking
-Skill - Skills associated with jobseeker profiles
-Notification - User notifications with read status
+PostgreSQL + Prisma ORM
+Prisma provides:
+Type-safe database access
+Schema migrations
+🔗 Relationship management
+Core Entities
+User – Role-based user accounts
+Job – Job postings
+Application – Job applications with status tracking
+Skill – Jobseeker skills
+Notification – User notifications with read state
 
 
 Getting Started
-Clone the repository and install dependencies
-Configure environment variables (database URL, JWT secret)
-Run Prisma migrations: npx prisma migrate dev
-Start the server: npm run start:dev
-Base URL: http://localhost:8000
+
+Clone the Repository
+git clone <repository-url>
+cd job-board-api
+
+Install Dependencies
+npm install
+
+Configure Environment Variables
+DATABASE_URL=
+JWT_SECRET=
+
+Run Database Migrations
+npx prisma migrate dev
+
+Start the Server
+npm run start:dev
+
+Base URL
+http://localhost:8000
+
+
 
