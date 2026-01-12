@@ -153,10 +153,23 @@ export class JobsService {
     return applications;
   }
 
-  async searchForJobName(jobName: string): Promise<Job[]> {
-    const jobs = await this.prismaService.job.findMany({
-      where: { title: jobName },
+  async searchForJobName(query: string): Promise<Job[]> {
+    if (!query || query.trim() === '') {
+      return [];
+    }
+
+    const result = await this.prismaService.job.findMany({
+      where: {
+        title: {
+          contains: query, // partial match: the full query string must appear continuously in the title
+          mode: 'insensitive', // case-insensitive search (ignores upper/lowercase)
+        },
+      },
+      orderBy: {
+        createdAt: 'desc', // for newest job first
+      },
     });
-    return jobs;
+
+    return result;
   }
 }
