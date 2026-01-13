@@ -1,15 +1,15 @@
 Job Board API
 
-A comprehensive RESTful API for a job board platform that connects jobseekers with recruiters.
-It supports user authentication, job postings, application management, skill tracking, and real-time notifications.
+A RESTful API that connects jobseekers and recruiters, enabling job posting, job applications, and real-time updates. Built with a strong focus on security, performance, and clean backend architecture.
 
 🚀 Features
-JWT-based authentication
-Job posting and search
-Job application workflow
-Skill management
-Real-time notifications (WebSocket)
-Role-based access control (Jobseeker, Recruiter, Admin)
+
+JWT-based authentication with role-based access control (Jobseeker, Recruiter, Admin)
+Job posting, search, and pagination
+Job application management and applicant tracking
+
+Skill management for jobseekers. 
+Real-time notifications using WebSockets
 
 | Technology   | Purpose |
 |-------------|--------|
