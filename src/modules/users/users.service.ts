@@ -11,7 +11,16 @@ export class UsersService {
   private logger = new Logger();
   constructor(private readonly prisma: PrismaService) {}
 
-  async getAllRecruiters(): Promise<IUserWithOutPassword[]> {
+  async getAllRecruiters(
+    page: number,
+    limit: number,
+  ): Promise<IUserWithOutPassword[]> {
+    console.log({
+      typeOfPage: typeof page,
+      page,
+      typeOfLimit: typeof limit,
+      limit,
+    });
     const users = await this.prisma.user.findMany({
       where: { role: Role.Recruiter, deletedAt: null },
       select: this.userSelectedFields,
@@ -141,8 +150,13 @@ block the creation of duplcate skill on every user - done
 add update method for skill - done
 get all skill by admin - done 
 get skill by id for admin - done
-query string the job search
-test the query string create a new job then query it by searchForJobName method
-add pagination on get all methods
+query string the job search - done 
+test the query string create a new job then query it by searchForJobName method - done
+add pagination on get all methods: 
+USER 
+JOBS
+APPLICATIONS
 if user was hired then the company was not null for that user
+user can get there skill on current endpoints
+get user by id must shown there skills too
 */
