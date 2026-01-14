@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -30,8 +31,11 @@ export class UsersController {
   @Get('admin/recruiters')
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Admin)
-  async getAllRecruiters(): Promise<IUserWithOutPassword[]> {
-    return await this.usersService.getAllRecruiters();
+  async getAllRecruiters(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 0,
+  ): Promise<IUserWithOutPassword[]> {
+    return await this.usersService.getAllRecruiters(page, limit);
   }
 
   @Get('admin/jobseekers')
