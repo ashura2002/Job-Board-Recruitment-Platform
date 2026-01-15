@@ -21,7 +21,7 @@ export class UsersService {
     const skip = (safePage - 1) * safeLimit;
     const where = { role: Role.Recruiter, deletedAt: null };
 
-    const [fetchedUsers, total] = await this.prisma.$transaction([
+    const [fetchedRecruiters, total] = await this.prisma.$transaction([
       this.prisma.user.findMany({
         where: where,
         skip,
@@ -34,7 +34,7 @@ export class UsersService {
     ]);
 
     return {
-      data: fetchedUsers,
+      data: fetchedRecruiters,
       metaData: {
         total,
         page: safePage,
@@ -44,12 +44,34 @@ export class UsersService {
     };
   }
 
-  async getAllJobSeekers(): Promise<IUserWithOutPassword[]> {
-    const users = await this.prisma.user.findMany({
-      where: { role: Role.Jobseeker },
-      select: this.userSelectedFields,
-    });
-    return users;
+  async getAllJobSeekers(
+    page: number,
+    limit: number,
+  ): Promise<PaginatedResult<IUserWithOutPassword>> {
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.min(Math.max(limit, 1), 50);
+    const skip = (safePage - 1) * safeLimit;
+    const where = { role: Role.Jobseeker };
+
+    const [fetchedJobseekers, total] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        take: safeLimit,
+        skip,
+        where: where,
+        select: this.userSelectedFields,
+      }),
+      this.prisma.user.count({ where: where }),
+    ]);
+
+    return {
+      data: fetchedJobseekers,
+      metaData: {
+        total,
+        page: safePage,
+        limit: safeLimit,
+        totalPages: Math.ceil(total / safeLimit),
+      },
+    };
   }
 
   async findById(userId: number): Promise<IUserWithOutPassword> {
@@ -87,7 +109,7 @@ export class UsersService {
   }
 
   // get all soft-deleted account
-  async getAllDeletedAccount(): Promise<IUserWithOutPassword[]> {
+  async getAllDeletedAccount(): Promise<any> {
     const users = await this.prisma.user.findMany({
       where: { deletedAt: { not: null } },
       select: this.userSelectedFields,
@@ -168,6 +190,7 @@ get all skill by admin - done
 get skill by id for admin - done
 query string the job search - done 
 test the query string create a new job then query it by searchForJobName method - done
+
 add pagination on get all methods: 
 USER 
 JOBS
@@ -175,4 +198,7 @@ APPLICATIONS
 if user was hired then the company was not null for that user
 user can get there skill on current endpoints
 get user by id must shown there skills too
+implement Oauth2.0
+nodemailer for gmail notifications
+create unit test for every controller and service
 */

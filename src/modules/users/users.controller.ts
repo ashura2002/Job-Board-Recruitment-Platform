@@ -42,14 +42,17 @@ export class UsersController {
   @Get('admin/jobseekers')
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Admin)
-  async getAllJobSeekers(): Promise<IUserWithOutPassword[]> {
-    return await this.usersService.getAllJobSeekers();
+  async getAllJobSeekers(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ): Promise<PaginatedResult<IUserWithOutPassword>> {
+    return await this.usersService.getAllJobSeekers(page, limit);
   }
 
   @Get('admin/deleted-account')
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Admin)
-  async getAllDeletedAccount(): Promise<IUserWithOutPassword[]> {
+  async getAllDeletedAccount(): Promise<any> {
     return this.usersService.getAllDeletedAccount();
   }
 
