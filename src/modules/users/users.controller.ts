@@ -21,6 +21,7 @@ import { Role } from 'src/generated/prisma/enums';
 import { Roles } from 'src/common/decorators/role.decorator';
 import type { AuthUser } from 'src/common/types/auth-user';
 import { UpdateUserDTO } from './dto/update-user.dto';
+import { PaginatedResult } from 'src/common/types/paginated-result.type';
 
 @Controller('users')
 @ApiBearerAuth('access-token')
@@ -33,8 +34,8 @@ export class UsersController {
   @Roles(Role.Admin)
   async getAllRecruiters(
     @Query('page', ParseIntPipe) page = 1,
-    @Query('limit', ParseIntPipe) limit = 0,
-  ): Promise<IUserWithOutPassword[]> {
+    @Query('limit', ParseIntPipe) limit = 10,
+  ): Promise<PaginatedResult<IUserWithOutPassword>> {
     return await this.usersService.getAllRecruiters(page, limit);
   }
 

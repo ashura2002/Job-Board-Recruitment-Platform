@@ -5,6 +5,7 @@ import { IUserWithOutPassword } from './dto/user-response.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { hashPassword } from 'src/common/helper/password-hasher';
 import { Cron } from '@nestjs/schedule';
+import { PaginatedResult } from 'src/common/types/paginated-result.type';
 
 @Injectable()
 export class UsersService {
@@ -14,18 +15,33 @@ export class UsersService {
   async getAllRecruiters(
     page: number,
     limit: number,
-  ): Promise<IUserWithOutPassword[]> {
-    console.log({
-      typeOfPage: typeof page,
-      page,
-      typeOfLimit: typeof limit,
-      limit,
-    });
-    const users = await this.prisma.user.findMany({
-      where: { role: Role.Recruiter, deletedAt: null },
-      select: this.userSelectedFields,
-    });
-    return users;
+  ): Promise<PaginatedResult<IUserWithOutPassword>> {
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.min(Math.max(limit, 1), 50);
+    const skip = (safePage - 1) * safeLimit;
+    const where = { role: Role.Recruiter, deletedAt: null };
+
+    const [fetchedUsers, total] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        where: where,
+        skip,
+        take: safeLimit,
+        select: this.userSelectedFields,
+      }),
+      this.prisma.user.count({
+        where: where,
+      }),
+    ]);
+
+    return {
+      data: fetchedUsers,
+      metaData: {
+        total,
+        page: safePage,
+        limit: safeLimit,
+        totalPages: Math.ceil(total / safeLimit),
+      },
+    };
   }
 
   async getAllJobSeekers(): Promise<IUserWithOutPassword[]> {
