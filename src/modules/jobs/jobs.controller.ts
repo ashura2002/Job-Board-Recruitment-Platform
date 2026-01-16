@@ -22,7 +22,7 @@ import { Roles } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/generated/prisma/enums';
 import { Application, Job } from 'src/generated/prisma/client';
 import { UpdateJobs } from './dto/update-job.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JobWithApplicants } from 'src/common/types/job-with-applicants.types';
 
 @Controller('jobs')
@@ -45,18 +45,49 @@ export class JobsController {
 
   // public route
   @Get()
+  @ApiQuery({
+    type: Number,
+    name: 'page',
+    required: false,
+    example: 1,
+  })
+  @ApiQuery({
+    type: Number,
+    name: 'limit',
+    required: false,
+    example: 10,
+  })
   @HttpCode(HttpStatus.OK)
-  async getAllJobs(): Promise<Job[]> {
-    return await this.jobsService.getAllJobs();
+  async getAllJobs(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ): Promise<any> {
+    return await this.jobsService.getAllJobs(page, limit);
   }
 
   // Recruiters all jobs created
   @Get('own-posted-jobs')
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    required: false,
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: Number,
+    required: false,
+    example: 10,
+  })
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Recruiter)
-  async getAllOwnJobs(@Req() req: AuthUser): Promise<Job[]> {
+  async getAllOwnJobs(
+    @Req() req: AuthUser,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ): Promise<any> {
     const { userId } = req.user;
-    return await this.jobsService.getAllOwnJobs(userId);
+    return await this.jobsService.getAllOwnJobs(userId, page, limit);
   }
 
   // Recruiters get one all jobs created

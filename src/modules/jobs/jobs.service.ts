@@ -9,6 +9,7 @@ import { CreateJobDTO } from './dto/create-job.dto';
 import { Application, Job } from 'src/generated/prisma/client';
 import { UpdateJobs } from './dto/update-job.dto';
 import { JobWithApplicants } from 'src/common/types/job-with-applicants.types';
+import { PaginatedResult } from 'src/common/types/paginated-result.type';
 
 @Injectable()
 export class JobsService {
@@ -24,11 +25,33 @@ export class JobsService {
     return job;
   }
 
-  async getAllOwnJobs(userId: number): Promise<Job[]> {
-    const jobs = await this.prismaService.job.findMany({
-      where: { userId: userId },
-    });
-    return jobs;
+  async getAllOwnJobs(
+    userId: number,
+    page: number,
+    limit: number,
+  ): Promise<PaginatedResult<Job>> {
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.min(Math.max(limit, 1), 50);
+    const skip = (safePage - 1) * safeLimit;
+
+    const [fetchJobs, total] = await this.prismaService.$transaction([
+      this.prismaService.job.findMany({
+        where: { userId },
+        take: safeLimit,
+        skip,
+      }),
+      this.prismaService.job.count({ where: { userId } }),
+    ]);
+
+    return {
+      data: fetchJobs,
+      metaData: {
+        total,
+        page: safePage,
+        limit: safeLimit,
+        totalPages: Math.ceil(total / safeLimit),
+      },
+    };
   }
 
   async getOneOnMyOwnJobs(jobId: number, userId: number): Promise<Job> {
@@ -39,19 +62,28 @@ export class JobsService {
     return job;
   }
 
-  async getAllJobs(): Promise<Job[]> {
-    const jobs = await this.prismaService.job.findMany({
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            fullname: true,
-          },
-        },
+  async getAllJobs(page: number, limit: number): Promise<PaginatedResult<Job>> {
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.min(Math.max(limit, 1), 50); // Even if the client sends limit=1000, the server will only use 50.
+    const skip = (safePage - 1) * safeLimit;
+    // console.log({ page, limit });
+
+    const [fetchJobs, total] = await this.prismaService.$transaction([
+      this.prismaService.job.findMany({
+        take: safeLimit,
+        skip,
+      }),
+      this.prismaService.job.count(),
+    ]);
+    return {
+      data: fetchJobs,
+      metaData: {
+        total,
+        page: safePage,
+        limit: safeLimit,
+        totalPages: Math.ceil(total / safeLimit),
       },
-    });
-    return jobs;
+    };
   }
 
   async updateOwnPostedJobs(
