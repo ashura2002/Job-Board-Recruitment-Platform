@@ -51,7 +51,7 @@ export class UsersService {
     const safePage = Math.max(page, 1);
     const safeLimit = Math.min(Math.max(limit, 1), 50);
     const skip = (safePage - 1) * safeLimit;
-    const where = { role: Role.Jobseeker };
+    const where = { role: Role.Jobseeker, deletedAt: null };
 
     const [fetchedJobseekers, total] = await this.prisma.$transaction([
       this.prisma.user.findMany({
@@ -109,12 +109,37 @@ export class UsersService {
   }
 
   // get all soft-deleted account
-  async getAllDeletedAccount(): Promise<any> {
-    const users = await this.prisma.user.findMany({
-      where: { deletedAt: { not: null } },
-      select: this.userSelectedFields,
-    });
-    return users;
+  async getAllDeletedAccount(
+    page: number,
+    limit: number,
+  ): Promise<PaginatedResult<IUserWithOutPassword>> {
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.min(Math.max(limit, 1), 50);
+    const skip = (safePage - 1) * safeLimit;
+
+    const [softDeletedAccounts, total] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        where: {
+          deletedAt: {
+            not: null,
+          },
+        },
+        take: safeLimit,
+        skip,
+        select: this.userSelectedFields,
+      }),
+      this.prisma.user.count({ where: { deletedAt: { not: null } } }),
+    ]);
+
+    return {
+      data: softDeletedAccounts,
+      metaData: {
+        total,
+        page: safePage,
+        limit: safeLimit,
+        totalPages: Math.ceil(total / safeLimit),
+      },
+    };
   }
 
   async findUserbyEmail(email: string): Promise<IUserWithOutPassword | null> {
@@ -192,7 +217,7 @@ query string the job search - done
 test the query string create a new job then query it by searchForJobName method - done
 
 add pagination on get all methods: 
-USER 
+USER - DONE
 JOBS
 APPLICATIONS
 if user was hired then the company was not null for that user
