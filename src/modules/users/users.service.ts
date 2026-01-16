@@ -221,7 +221,7 @@ USER - DONE
 JOBS
 APPLICATIONS
 if user was hired then the company was not null for that user
-user can get there skill on current endpoints
+user can see there skill on get current user
 get user by id must shown there skills too
 implement Oauth2.0
 nodemailer for gmail notifications
