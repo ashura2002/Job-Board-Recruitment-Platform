@@ -15,7 +15,7 @@ import {
 import { UsersService } from './users.service';
 import { IUserWithOutPassword } from './dto/user-response.dto';
 import { JwtGuard } from 'src/common/guards/Jwt.guard';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
 import { RolesGuard } from 'src/common/guards/role.guard';
 import { Role } from 'src/generated/prisma/enums';
 import { Roles } from 'src/common/decorators/role.decorator';
@@ -30,6 +30,21 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('admin/recruiters')
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    example: 10,
+  })
+  @ApiOkResponse({
+    description: 'Paginated list of recruiters',
+  })
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Admin)
   async getAllRecruiters(
@@ -40,6 +55,19 @@ export class UsersController {
   }
 
   @Get('admin/jobseekers')
+  @ApiQuery({
+    type: Number,
+    name: 'page',
+    required: false,
+    example: 1,
+  })
+  @ApiQuery({
+    type: Number,
+    name: 'limit',
+    required: false,
+    example: 10,
+  })
+  @ApiOkResponse({ description: 'Paginated list of jobseekers' })
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Admin)
   async getAllJobSeekers(
@@ -50,10 +78,26 @@ export class UsersController {
   }
 
   @Get('admin/deleted-account')
+  @ApiQuery({
+    type: Number,
+    name: 'page',
+    required: false,
+    example: 1,
+  })
+  @ApiQuery({
+    type: Number,
+    name: 'limit',
+    required: false,
+    example: 10,
+  })
+  @ApiOkResponse({ description: 'Paginated list of soft deleted accounts' })
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Admin)
-  async getAllDeletedAccount(): Promise<any> {
-    return this.usersService.getAllDeletedAccount();
+  async getAllDeletedAccount(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ): Promise<PaginatedResult<IUserWithOutPassword>> {
+    return this.usersService.getAllDeletedAccount(page, limit);
   }
 
   @Get('admin/:userId')
