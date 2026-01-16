@@ -24,6 +24,7 @@ import { Application, Job } from 'src/generated/prisma/client';
 import { UpdateJobs } from './dto/update-job.dto';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JobWithApplicants } from 'src/common/types/job-with-applicants.types';
+import { PaginatedResult } from 'src/common/types/paginated-result.type';
 
 @Controller('jobs')
 @UseGuards(JwtGuard, RolesGuard)
@@ -85,7 +86,7 @@ export class JobsController {
     @Req() req: AuthUser,
     @Query('page', ParseIntPipe) page: number,
     @Query('limit', ParseIntPipe) limit = 10,
-  ): Promise<any> {
+  ): Promise<PaginatedResult<Job>> {
     const { userId } = req.user;
     return await this.jobsService.getAllOwnJobs(userId, page, limit);
   }
@@ -97,7 +98,7 @@ export class JobsController {
   async getOneOnMyOwnJobs(
     @Param('jobId', ParseIntPipe) jobId: number,
     @Req() req: AuthUser,
-  ): Promise<any> {
+  ): Promise<Job> {
     const { userId } = req.user;
     return await this.jobsService.getOneOnMyOwnJobs(jobId, userId);
   }
