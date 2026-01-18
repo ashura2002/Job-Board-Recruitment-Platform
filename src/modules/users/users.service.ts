@@ -218,8 +218,8 @@ test the query string create a new job then query it by searchForJobName method 
 
 add pagination on get all methods: 
 USER - DONE
-JOBS
-APPLICATIONS
+JOBS - DONE
+SKILLS - DONE
 if user was hired then the company was not null for that user
 user can see there skill on get current user
 get user by id must shown there skills too

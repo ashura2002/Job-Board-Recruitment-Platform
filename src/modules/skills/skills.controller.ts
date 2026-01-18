@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -20,8 +21,9 @@ import { Roles } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/generated/prisma/enums';
 import type { AuthUser } from 'src/common/types/auth-user';
 import { Skill } from 'src/generated/prisma/client';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { UpdateSkillDTO } from './dto/update-skill.dto';
+import { PaginatedResult } from 'src/common/types/paginated-result.type';
 
 @Controller('skills')
 @UseGuards(JwtGuard, RolesGuard)
@@ -63,10 +65,25 @@ export class SkillsController {
 
   // admin can see all the skills, can delete but can't edit - need server side pagination
   @Get('admin')
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    example: 1,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: Number,
+    example: 10,
+    required: false,
+  })
   @HttpCode(HttpStatus.OK)
   @Roles(Role.Admin)
-  async getAllSKillsByAdmin(): Promise<Skill[]> {
-    return await this.skillsService.getAllSKillsByAdmin();
+  async getAllSKillsByAdmin(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ): Promise<PaginatedResult<Skill>> {
+    return await this.skillsService.getAllSKillsByAdmin(page, limit);
   }
 
   // admin can get one skill of any jobseekers
