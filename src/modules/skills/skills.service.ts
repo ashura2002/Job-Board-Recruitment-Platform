@@ -7,6 +7,7 @@ import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateSkillDTO } from './dto/create-skill.dto';
 import { Skill } from 'src/generated/prisma/client';
 import { UpdateSkillDTO } from './dto/update-skill.dto';
+import { PaginatedResult } from 'src/common/types/paginated-result.type';
 
 @Injectable()
 export class SkillsService {
@@ -76,9 +77,31 @@ export class SkillsService {
     });
   }
 
-  async getAllSKillsByAdmin(): Promise<Skill[]> {
-    const skills = await this.prismaService.skill.findMany();
-    return skills;
+  async getAllSKillsByAdmin(
+    page: number,
+    limit: number,
+  ): Promise<PaginatedResult<Skill>> {
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.min(Math.max(limit, 1), 50); // Even if the client sends limit=1000, the server will only use 50.
+    const skip = (safePage - 1) * safeLimit;
+
+    const [fetchedSkills, total] = await this.prismaService.$transaction([
+      this.prismaService.skill.findMany({
+        take: safeLimit,
+        skip,
+      }),
+      this.prismaService.skill.count(),
+    ]);
+
+    return {
+      data: fetchedSkills,
+      metaData: {
+        limit: safeLimit,
+        page: safePage,
+        total,
+        totalPages: Math.ceil(total / safeLimit),
+      },
+    };
   }
 
   async getSkillByIDByAdmin(skillId: number): Promise<Skill> {
