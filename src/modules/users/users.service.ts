@@ -173,9 +173,27 @@ export class UsersService {
   async getCurrentUser(userId: number): Promise<IUserWithOutPassword> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: this.userSelectedFields,
+      select: {
+        id: true,
+        email: true,
+        fullname: true,
+        username: true,
+        role: true,
+        age: true,
+        companyName: true,
+        deletedAt: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+        skills: {
+          select: { skillName: true },
+        },
+      },
     });
-    return user;
+    return {
+      ...user,
+      skills: user.skills.map((s) => s.skillName), // get the skill name and return it in a new array
+    };
   }
 
   // for login only to compare password in dto to db password
@@ -220,9 +238,10 @@ add pagination on get all methods:
 USER - DONE
 JOBS - DONE
 SKILLS - DONE
-if user was hired then the company was not null for that user
-user can see there skill on get current user
+user can see there skill on get current user - DONE
+
 get user by id must shown there skills too
+if user was hired then the company was not null for that user
 implement Oauth2.0
 nodemailer for gmail notifications
 create unit test for every controller and service

@@ -12,4 +12,5 @@ export type IUserWithOutPassword = {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
+  skills?: string[];
 };
