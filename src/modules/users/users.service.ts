@@ -77,10 +77,28 @@ export class UsersService {
   async findById(userId: number): Promise<IUserWithOutPassword> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: this.userSelectedFields,
+      select: {
+        id: true,
+        email: true,
+        fullname: true,
+        username: true,
+        role: true,
+        age: true,
+        companyName: true,
+        deletedAt: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+        skills: {
+          select: { skillName: true },
+        },
+      },
     });
     if (!user) throw new NotFoundException('User not found');
-    return user;
+    return {
+      ...user,
+      skills: user.skills.map((s) => s.skillName),
+    };
   }
 
   async updateOwnDetails(dto: UpdateUserDTO, userId: number): Promise<void> {
@@ -239,8 +257,8 @@ USER - DONE
 JOBS - DONE
 SKILLS - DONE
 user can see there skill on get current user - DONE
+get user by id must shown there skills too - DONE
 
-get user by id must shown there skills too
 if user was hired then the company was not null for that user
 implement Oauth2.0
 nodemailer for gmail notifications
