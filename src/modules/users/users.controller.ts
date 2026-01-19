@@ -100,9 +100,8 @@ export class UsersController {
     return this.usersService.getAllDeletedAccount(page, limit);
   }
 
-  @Get('admin/:userId')
+  @Get('details/:userId')
   @HttpCode(HttpStatus.OK)
-  @Roles(Role.Admin)
   async getUserById(@Param('userId', ParseIntPipe) userId: number) {
     return await this.usersService.findById(userId);
   }
