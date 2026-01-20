@@ -117,10 +117,11 @@ export class ApplicationsService {
     updateDTO: UpdateApplicationStatusDTO,
     recruiterId: number,
   ): Promise<Application> {
-    const currentUser = await this.userService.findById(recruiterId);
+    const recruiter = await this.userService.findById(recruiterId);
+
     const application = await this.prismaService.application.findUnique({
       where: { id: applicationId },
-      include: { job: true },
+      include: { job: true, user: true }, // this is the jobseeker
     });
     if (!application) throw new NotFoundException('Application not found');
 
@@ -130,8 +131,23 @@ export class ApplicationsService {
         'You are not allowed to update this application',
       );
 
+    if (updateDTO.status === JobStatus.Hired) {
+      if (!recruiter.companyName) {
+        throw new BadRequestException(
+          'Recruiter must have a company name before hiring',
+        );
+      }
+
+      await this.prismaService.user.update({
+        where: { id: application.userId },
+        data: {
+          companyName: recruiter.companyName,
+        },
+      });
+    }
+
     // notification for the jobseeker
-    const message = `${currentUser.fullname} was ${updateDTO.status} you in your job application`;
+    const message = `${recruiter.fullname} was ${updateDTO.status} you in your job application`;
     await this.notificationService.createNotification(
       { message },
       application.userId,
