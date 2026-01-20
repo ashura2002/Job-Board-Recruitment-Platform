@@ -258,8 +258,8 @@ JOBS - DONE
 SKILLS - DONE
 user can see there skill on get current user - DONE
 get user by id must shown there skills too - DONE
+if user was hired then the company was not null for that user - DONE
 
-if user was hired then the company was not null for that user
 implement Oauth2.0
 nodemailer for gmail notifications
 create unit test for every controller and service
