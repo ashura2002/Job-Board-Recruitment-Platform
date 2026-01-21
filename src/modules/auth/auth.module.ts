@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { jwtConfigFactory } from 'src/config/jwt.config';
 import { PrismaModule } from 'src/common/prisma/prisma.module';
+import googleOauthConfig from 'src/config/google-oauth-config';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PrismaModule } from 'src/common/prisma/prisma.module';
       inject: [ConfigService],
       useFactory: jwtConfigFactory,
     }),
+    ConfigModule.forFeature(googleOauthConfig),
   ],
   controllers: [AuthController],
   providers: [AuthService],
