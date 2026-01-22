@@ -15,6 +15,7 @@ import type { AuthUser } from 'src/common/types/auth-user';
 import { JwtGuard } from 'src/common/guards/Jwt.guard';
 import { RecoverDTO } from './dto/recover.dto';
 import { CreateRecruiterDTO } from '../users/dto/create-recruiter.dto';
+import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -43,6 +44,14 @@ export class AuthController {
   ): Promise<{ message: string; token: string }> {
     const accessToken = await this.authService.login(dto);
     return { message: 'Login Successfully', token: accessToken };
+  }
+
+  @Post('gmail-code-verification')
+  @HttpCode(HttpStatus.OK)
+  async gmailVerificationCode(
+    @Body() dto: gmailVerificationCodeDTO,
+  ): Promise<any> {
+    return 'test';
   }
 
   @Post('recover')

@@ -18,6 +18,7 @@ import { LoginDTO } from './dto/login.dto';
 import { IJwtResponse } from '../../common/types/jwt.types';
 import { RecoverDTO } from './dto/recover.dto';
 import { CreateRecruiterDTO } from '../users/dto/create-recruiter.dto';
+import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,6 +37,8 @@ export class AuthService {
   async registerAsJobSeeker(dto: CreateUserDTO): Promise<IUserWithOutPassword> {
     return this.registerUserWithRole(dto, Role.Jobseeker);
   }
+
+  async gmailVerificationCode(dto: gmailVerificationCodeDTO): Promise<any> {}
 
   async recoverAccount(recoverDTO: RecoverDTO): Promise<void> {
     const { email } = recoverDTO;

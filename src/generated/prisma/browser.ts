@@ -42,3 +42,8 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type Skill = Prisma.SkillModel
+/**
+ * Model EmailVerification
+ * 
+ */
+export type EmailVerification = Prisma.EmailVerificationModel
