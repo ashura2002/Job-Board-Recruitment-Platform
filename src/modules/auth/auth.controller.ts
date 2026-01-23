@@ -23,10 +23,9 @@ export class AuthController {
 
   @Post('registration/recruiter')
   @HttpCode(HttpStatus.CREATED)
-  async registerAsRecruiter(
-    @Body() dto: CreateRecruiterDTO,
-  ): Promise<IUserWithOutPassword> {
-    return await this.authService.registerAsRecruiter(dto);
+  async registerAsRecruiter(@Body() dto: CreateRecruiterDTO): Promise<any> {
+    await this.authService.sendCodeInEmailAsRecruiter(dto);
+    return { message: 'code is sent successfully to your gmail' };
   }
 
   @Post('registration/jobSeeker')
