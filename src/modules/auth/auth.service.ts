@@ -28,10 +28,26 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async registerAsRecruiter(
-    dto: CreateRecruiterDTO,
-  ): Promise<IUserWithOutPassword> {
-    return this.registerUserWithRole(dto, Role.Recruiter);
+  async sendCodeInEmailAsRecruiter(dto: CreateRecruiterDTO): Promise<any> {
+    const { email, username } = dto;
+    const existingEmail = await this.userService.findUserbyEmail(email);
+    if (existingEmail)
+      throw new BadRequestException('Email Already Exist Try Again');
+    const existingUsername = await this.userService.findByUserName(username);
+    if (existingUsername)
+      throw new BadRequestException(
+        `Username ${username} is already existed. Try again`,
+      );
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    await this.prismaService.emailVerification.deleteMany({
+      where: { email },
+    });
+
+    await this.prismaService.emailVerification.create({
+      data: { email, expiresAt, code },
+    });
   }
 
   async registerAsJobSeeker(dto: CreateUserDTO): Promise<IUserWithOutPassword> {
