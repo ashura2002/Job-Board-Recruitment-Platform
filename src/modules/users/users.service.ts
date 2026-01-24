@@ -267,6 +267,7 @@ implement Oauth2.0
 * refactor the register endpoint
 * it should return only verification send on their email
 * gmail-code-verification: if the code is valid then the credential will created and save to DB
+* added background job delete all the expired code on table
 
 nodemailer for gmail notifications
 create unit test for every controller and service
