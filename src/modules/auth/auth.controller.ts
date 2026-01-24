@@ -23,17 +23,20 @@ export class AuthController {
 
   @Post('registration/recruiter')
   @HttpCode(HttpStatus.CREATED)
-  async registerAsRecruiter(@Body() dto: CreateRecruiterDTO): Promise<any> {
+  async registerAsRecruiter(
+    @Body() dto: CreateRecruiterDTO,
+  ): Promise<{ message: string }> {
     await this.authService.sendCodeInEmailAsRecruiter(dto);
-    return { message: 'code is sent successfully to your gmail' };
+    return { message: 'Verification code sent to email' };
   }
 
   @Post('registration/jobSeeker')
   @HttpCode(HttpStatus.CREATED)
   async registerAsJobSeeker(
     @Body() dto: CreateUserDTO,
-  ): Promise<IUserWithOutPassword> {
-    return await this.authService.registerAsJobSeeker(dto);
+  ): Promise<{ message: string }> {
+    await this.authService.sendCodeInEmailAsJobseeker(dto);
+    return { message: 'Verification code sent to email' };
   }
 
   @Post('login')

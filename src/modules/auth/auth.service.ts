@@ -7,18 +7,14 @@ import {
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
-import { Prisma, Role } from 'src/generated/prisma/client';
-import {
-  compareHashPassword,
-  hashPassword,
-} from 'src/common/helper/password-hasher';
-import { IUserWithOutPassword } from '../users/dto/user-response.dto';
+import { compareHashPassword } from 'src/common/helper/password-hasher';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDTO } from './dto/login.dto';
 import { IJwtResponse } from '../../common/types/jwt.types';
 import { RecoverDTO } from './dto/recover.dto';
 import { CreateRecruiterDTO } from '../users/dto/create-recruiter.dto';
 import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -26,34 +22,19 @@ export class AuthService {
     private readonly prismaService: PrismaService,
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
-  async sendCodeInEmailAsRecruiter(dto: CreateRecruiterDTO): Promise<any> {
-    const { email, username } = dto;
-    const existingEmail = await this.userService.findUserbyEmail(email);
-    if (existingEmail)
-      throw new BadRequestException('Email Already Exist Try Again');
-    const existingUsername = await this.userService.findByUserName(username);
-    if (existingUsername)
-      throw new BadRequestException(
-        `Username ${username} is already existed. Try again`,
-      );
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-
-    await this.prismaService.emailVerification.deleteMany({
-      where: { email },
-    });
-
-    await this.prismaService.emailVerification.create({
-      data: { email, expiresAt, code },
-    });
+  async sendCodeInEmailAsRecruiter(dto: CreateRecruiterDTO): Promise<void> {
+    await this.sendUsersCodeWithRole(dto);
   }
 
-  async registerAsJobSeeker(dto: CreateUserDTO): Promise<IUserWithOutPassword> {
-    return this.registerUserWithRole(dto, Role.Jobseeker);
+  async sendCodeInEmailAsJobseeker(dto: CreateUserDTO): Promise<void> {
+    await this.sendUsersCodeWithRole(dto);
   }
 
+  // this the endpoint of actual creations of user
+  // think if these endpoint should check the email here
   async gmailVerificationCode(dto: gmailVerificationCodeDTO): Promise<any> {}
 
   async recoverAccount(recoverDTO: RecoverDTO): Promise<void> {
@@ -107,36 +88,29 @@ export class AuthService {
     });
   }
 
-  private async registerUserWithRole(
-    dto: CreateUserDTO,
-    role: Role,
-  ): Promise<IUserWithOutPassword> {
-    const { email, password, username } = dto;
+  private async sendUsersCodeWithRole(dto: CreateUserDTO): Promise<any> {
+    const { email, username } = dto;
     const existingUsername = await this.userService.findByUserName(username);
     if (existingUsername)
       throw new ConflictException(`${username} is already in used.`);
     const existingEmail = await this.userService.findUserbyEmail(email);
     if (existingEmail) throw new ConflictException('Email is already in used.');
-    const hash = await hashPassword(password);
 
-    // Added try/catch even though there is a pre-check for existing emails
-    // This is necessary to handle the scenario where multiple users
-    // attempt to register with the same email at the same time (race condition)
-    try {
-      const user = await this.prismaService.user.create({
-        data: {
-          ...dto,
-          password: hash,
-          role,
-        },
-        select: this.userService.userSelectedFields,
-      });
-      return user;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002')
-          throw new ConflictException('Email already used.');
-      }
-    }
+    // generate code
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    // remove old code
+    await this.prismaService.emailVerification.deleteMany({
+      where: { email },
+    });
+
+    // save code
+    await this.prismaService.emailVerification.create({
+      data: { email, expiresAt, code },
+    });
+
+    // send code to there email
+    await this.mailService.sendVerificationCode(email, code);
   }
 }

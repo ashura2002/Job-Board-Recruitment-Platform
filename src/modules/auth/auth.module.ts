@@ -7,11 +7,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { jwtConfigFactory } from 'src/config/jwt.config';
 import { PrismaModule } from 'src/common/prisma/prisma.module';
 import googleOauthConfig from 'src/config/google-oauth-config';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
     PrismaModule,
     UsersModule,
+    MailModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
