@@ -52,8 +52,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async gmailVerificationCode(
     @Body() dto: gmailVerificationCodeDTO,
-  ): Promise<any> {
-    return 'test';
+  ): Promise<{ message: string }> {
+    await this.authService.gmailVerificationCode(dto);
+    return { message: 'Created Successfully' };
   }
 
   @Post('recover')

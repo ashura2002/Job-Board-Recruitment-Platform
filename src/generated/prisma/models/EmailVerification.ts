@@ -28,15 +28,25 @@ export type AggregateEmailVerification = {
 
 export type EmailVerificationAvgAggregateOutputType = {
   id: number | null
+  age: number | null
 }
 
 export type EmailVerificationSumAggregateOutputType = {
   id: number | null
+  age: number | null
 }
 
 export type EmailVerificationMinAggregateOutputType = {
   id: number | null
   email: string | null
+  password: string | null
+  fullname: string | null
+  username: string | null
+  role: $Enums.Role | null
+  age: number | null
+  isActive: boolean | null
+  companyName: string | null
+  deletedAt: Date | null
   code: string | null
   expiresAt: Date | null
   createdAt: Date | null
@@ -45,6 +55,14 @@ export type EmailVerificationMinAggregateOutputType = {
 export type EmailVerificationMaxAggregateOutputType = {
   id: number | null
   email: string | null
+  password: string | null
+  fullname: string | null
+  username: string | null
+  role: $Enums.Role | null
+  age: number | null
+  isActive: boolean | null
+  companyName: string | null
+  deletedAt: Date | null
   code: string | null
   expiresAt: Date | null
   createdAt: Date | null
@@ -53,6 +71,14 @@ export type EmailVerificationMaxAggregateOutputType = {
 export type EmailVerificationCountAggregateOutputType = {
   id: number
   email: number
+  password: number
+  fullname: number
+  username: number
+  role: number
+  age: number
+  isActive: number
+  companyName: number
+  deletedAt: number
   code: number
   expiresAt: number
   createdAt: number
@@ -62,15 +88,25 @@ export type EmailVerificationCountAggregateOutputType = {
 
 export type EmailVerificationAvgAggregateInputType = {
   id?: true
+  age?: true
 }
 
 export type EmailVerificationSumAggregateInputType = {
   id?: true
+  age?: true
 }
 
 export type EmailVerificationMinAggregateInputType = {
   id?: true
   email?: true
+  password?: true
+  fullname?: true
+  username?: true
+  role?: true
+  age?: true
+  isActive?: true
+  companyName?: true
+  deletedAt?: true
   code?: true
   expiresAt?: true
   createdAt?: true
@@ -79,6 +115,14 @@ export type EmailVerificationMinAggregateInputType = {
 export type EmailVerificationMaxAggregateInputType = {
   id?: true
   email?: true
+  password?: true
+  fullname?: true
+  username?: true
+  role?: true
+  age?: true
+  isActive?: true
+  companyName?: true
+  deletedAt?: true
   code?: true
   expiresAt?: true
   createdAt?: true
@@ -87,6 +131,14 @@ export type EmailVerificationMaxAggregateInputType = {
 export type EmailVerificationCountAggregateInputType = {
   id?: true
   email?: true
+  password?: true
+  fullname?: true
+  username?: true
+  role?: true
+  age?: true
+  isActive?: true
+  companyName?: true
+  deletedAt?: true
   code?: true
   expiresAt?: true
   createdAt?: true
@@ -182,6 +234,14 @@ export type EmailVerificationGroupByArgs<ExtArgs extends runtime.Types.Extension
 export type EmailVerificationGroupByOutputType = {
   id: number
   email: string
+  password: string
+  fullname: string
+  username: string
+  role: $Enums.Role
+  age: number
+  isActive: boolean
+  companyName: string | null
+  deletedAt: Date | null
   code: string
   expiresAt: Date
   createdAt: Date
@@ -213,6 +273,14 @@ export type EmailVerificationWhereInput = {
   NOT?: Prisma.EmailVerificationWhereInput | Prisma.EmailVerificationWhereInput[]
   id?: Prisma.IntFilter<"EmailVerification"> | number
   email?: Prisma.StringFilter<"EmailVerification"> | string
+  password?: Prisma.StringFilter<"EmailVerification"> | string
+  fullname?: Prisma.StringFilter<"EmailVerification"> | string
+  username?: Prisma.StringFilter<"EmailVerification"> | string
+  role?: Prisma.EnumRoleFilter<"EmailVerification"> | $Enums.Role
+  age?: Prisma.IntFilter<"EmailVerification"> | number
+  isActive?: Prisma.BoolFilter<"EmailVerification"> | boolean
+  companyName?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"EmailVerification"> | Date | string | null
   code?: Prisma.StringFilter<"EmailVerification"> | string
   expiresAt?: Prisma.DateTimeFilter<"EmailVerification"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"EmailVerification"> | Date | string
@@ -221,6 +289,14 @@ export type EmailVerificationWhereInput = {
 export type EmailVerificationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  fullname?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  companyName?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   code?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -228,18 +304,34 @@ export type EmailVerificationOrderByWithRelationInput = {
 
 export type EmailVerificationWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  email?: string
+  username?: string
   AND?: Prisma.EmailVerificationWhereInput | Prisma.EmailVerificationWhereInput[]
   OR?: Prisma.EmailVerificationWhereInput[]
   NOT?: Prisma.EmailVerificationWhereInput | Prisma.EmailVerificationWhereInput[]
-  email?: Prisma.StringFilter<"EmailVerification"> | string
+  password?: Prisma.StringFilter<"EmailVerification"> | string
+  fullname?: Prisma.StringFilter<"EmailVerification"> | string
+  role?: Prisma.EnumRoleFilter<"EmailVerification"> | $Enums.Role
+  age?: Prisma.IntFilter<"EmailVerification"> | number
+  isActive?: Prisma.BoolFilter<"EmailVerification"> | boolean
+  companyName?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"EmailVerification"> | Date | string | null
   code?: Prisma.StringFilter<"EmailVerification"> | string
   expiresAt?: Prisma.DateTimeFilter<"EmailVerification"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"EmailVerification"> | Date | string
-}, "id">
+}, "id" | "email" | "username">
 
 export type EmailVerificationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  fullname?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  companyName?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   code?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -256,6 +348,14 @@ export type EmailVerificationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.EmailVerificationScalarWhereWithAggregatesInput | Prisma.EmailVerificationScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"EmailVerification"> | number
   email?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
+  password?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
+  fullname?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
+  username?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
+  role?: Prisma.EnumRoleWithAggregatesFilter<"EmailVerification"> | $Enums.Role
+  age?: Prisma.IntWithAggregatesFilter<"EmailVerification"> | number
+  isActive?: Prisma.BoolWithAggregatesFilter<"EmailVerification"> | boolean
+  companyName?: Prisma.StringNullableWithAggregatesFilter<"EmailVerification"> | string | null
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailVerification"> | Date | string | null
   code?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
   expiresAt?: Prisma.DateTimeWithAggregatesFilter<"EmailVerification"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EmailVerification"> | Date | string
@@ -263,6 +363,14 @@ export type EmailVerificationScalarWhereWithAggregatesInput = {
 
 export type EmailVerificationCreateInput = {
   email: string
+  password: string
+  fullname: string
+  username: string
+  role?: $Enums.Role
+  age: number
+  isActive?: boolean
+  companyName?: string | null
+  deletedAt?: Date | string | null
   code: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -271,6 +379,14 @@ export type EmailVerificationCreateInput = {
 export type EmailVerificationUncheckedCreateInput = {
   id?: number
   email: string
+  password: string
+  fullname: string
+  username: string
+  role?: $Enums.Role
+  age: number
+  isActive?: boolean
+  companyName?: string | null
+  deletedAt?: Date | string | null
   code: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -278,6 +394,14 @@ export type EmailVerificationUncheckedCreateInput = {
 
 export type EmailVerificationUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   code?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -286,6 +410,14 @@ export type EmailVerificationUpdateInput = {
 export type EmailVerificationUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   code?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -294,6 +426,14 @@ export type EmailVerificationUncheckedUpdateInput = {
 export type EmailVerificationCreateManyInput = {
   id?: number
   email: string
+  password: string
+  fullname: string
+  username: string
+  role?: $Enums.Role
+  age: number
+  isActive?: boolean
+  companyName?: string | null
+  deletedAt?: Date | string | null
   code: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -301,6 +441,14 @@ export type EmailVerificationCreateManyInput = {
 
 export type EmailVerificationUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   code?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -309,6 +457,14 @@ export type EmailVerificationUpdateManyMutationInput = {
 export type EmailVerificationUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   code?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -317,6 +473,14 @@ export type EmailVerificationUncheckedUpdateManyInput = {
 export type EmailVerificationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  fullname?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  companyName?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   code?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -324,11 +488,20 @@ export type EmailVerificationCountOrderByAggregateInput = {
 
 export type EmailVerificationAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  age?: Prisma.SortOrder
 }
 
 export type EmailVerificationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  fullname?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  companyName?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   code?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -337,6 +510,14 @@ export type EmailVerificationMaxOrderByAggregateInput = {
 export type EmailVerificationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  fullname?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  companyName?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   code?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -344,6 +525,7 @@ export type EmailVerificationMinOrderByAggregateInput = {
 
 export type EmailVerificationSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  age?: Prisma.SortOrder
 }
 
 
@@ -351,6 +533,14 @@ export type EmailVerificationSumOrderByAggregateInput = {
 export type EmailVerificationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  password?: boolean
+  fullname?: boolean
+  username?: boolean
+  role?: boolean
+  age?: boolean
+  isActive?: boolean
+  companyName?: boolean
+  deletedAt?: boolean
   code?: boolean
   expiresAt?: boolean
   createdAt?: boolean
@@ -359,6 +549,14 @@ export type EmailVerificationSelect<ExtArgs extends runtime.Types.Extensions.Int
 export type EmailVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  password?: boolean
+  fullname?: boolean
+  username?: boolean
+  role?: boolean
+  age?: boolean
+  isActive?: boolean
+  companyName?: boolean
+  deletedAt?: boolean
   code?: boolean
   expiresAt?: boolean
   createdAt?: boolean
@@ -367,6 +565,14 @@ export type EmailVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.T
 export type EmailVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  password?: boolean
+  fullname?: boolean
+  username?: boolean
+  role?: boolean
+  age?: boolean
+  isActive?: boolean
+  companyName?: boolean
+  deletedAt?: boolean
   code?: boolean
   expiresAt?: boolean
   createdAt?: boolean
@@ -375,12 +581,20 @@ export type EmailVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.T
 export type EmailVerificationSelectScalar = {
   id?: boolean
   email?: boolean
+  password?: boolean
+  fullname?: boolean
+  username?: boolean
+  role?: boolean
+  age?: boolean
+  isActive?: boolean
+  companyName?: boolean
+  deletedAt?: boolean
   code?: boolean
   expiresAt?: boolean
   createdAt?: boolean
 }
 
-export type EmailVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "code" | "expiresAt" | "createdAt", ExtArgs["result"]["emailVerification"]>
+export type EmailVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "fullname" | "username" | "role" | "age" | "isActive" | "companyName" | "deletedAt" | "code" | "expiresAt" | "createdAt", ExtArgs["result"]["emailVerification"]>
 
 export type $EmailVerificationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "EmailVerification"
@@ -388,6 +602,14 @@ export type $EmailVerificationPayload<ExtArgs extends runtime.Types.Extensions.I
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     email: string
+    password: string
+    fullname: string
+    username: string
+    role: $Enums.Role
+    age: number
+    isActive: boolean
+    companyName: string | null
+    deletedAt: Date | null
     code: string
     expiresAt: Date
     createdAt: Date
@@ -816,6 +1038,14 @@ export interface Prisma__EmailVerificationClient<T, Null = never, ExtArgs extend
 export interface EmailVerificationFieldRefs {
   readonly id: Prisma.FieldRef<"EmailVerification", 'Int'>
   readonly email: Prisma.FieldRef<"EmailVerification", 'String'>
+  readonly password: Prisma.FieldRef<"EmailVerification", 'String'>
+  readonly fullname: Prisma.FieldRef<"EmailVerification", 'String'>
+  readonly username: Prisma.FieldRef<"EmailVerification", 'String'>
+  readonly role: Prisma.FieldRef<"EmailVerification", 'Role'>
+  readonly age: Prisma.FieldRef<"EmailVerification", 'Int'>
+  readonly isActive: Prisma.FieldRef<"EmailVerification", 'Boolean'>
+  readonly companyName: Prisma.FieldRef<"EmailVerification", 'String'>
+  readonly deletedAt: Prisma.FieldRef<"EmailVerification", 'DateTime'>
   readonly code: Prisma.FieldRef<"EmailVerification", 'String'>
   readonly expiresAt: Prisma.FieldRef<"EmailVerification", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"EmailVerification", 'DateTime'>

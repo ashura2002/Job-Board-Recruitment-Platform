@@ -7,7 +7,10 @@ import {
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
-import { compareHashPassword } from 'src/common/helper/password-hasher';
+import {
+  compareHashPassword,
+  hashPassword,
+} from 'src/common/helper/password-hasher';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDTO } from './dto/login.dto';
 import { IJwtResponse } from '../../common/types/jwt.types';
@@ -15,6 +18,7 @@ import { RecoverDTO } from './dto/recover.dto';
 import { CreateRecruiterDTO } from '../users/dto/create-recruiter.dto';
 import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
 import { MailService } from '../mail/mail.service';
+import { User } from 'src/generated/prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -26,16 +30,36 @@ export class AuthService {
   ) {}
 
   async sendCodeInEmailAsRecruiter(dto: CreateRecruiterDTO): Promise<void> {
-    await this.sendUsersCodeWithRole(dto);
+    await this.sendUsersCodes(dto);
   }
 
   async sendCodeInEmailAsJobseeker(dto: CreateUserDTO): Promise<void> {
-    await this.sendUsersCodeWithRole(dto);
+    await this.sendUsersCodes(dto);
   }
 
-  // this the endpoint of actual creations of user
-  // think if these endpoint should check the email here
-  async gmailVerificationCode(dto: gmailVerificationCodeDTO): Promise<any> {}
+  async gmailVerificationCode(dto: gmailVerificationCodeDTO): Promise<any> {
+    const { code } = dto;
+    const record = await this.prismaService.emailVerification.findFirst({
+      where: {
+        code,
+        expiresAt: {
+          gt: new Date(),
+        },
+      },
+    });
+    if (!record) throw new BadRequestException('Invalid or expired code');
+
+    await this.prismaService.user.create({
+      data: {
+        email: record.email,
+        password: record.password,
+        fullname: record.fullname,
+        username: record.username,
+        age: record.age,
+        role: record.role, // FIX THIS BUG: even if the user will register as a recruiter then the role is always been jobseeker
+      },
+    });
+  }
 
   async recoverAccount(recoverDTO: RecoverDTO): Promise<void> {
     const { email } = recoverDTO;
@@ -88,8 +112,8 @@ export class AuthService {
     });
   }
 
-  private async sendUsersCodeWithRole(dto: CreateUserDTO): Promise<any> {
-    const { email, username } = dto;
+  private async sendUsersCodes(dto: CreateUserDTO): Promise<void> {
+    const { email, username, password } = dto;
     const existingUsername = await this.userService.findByUserName(username);
     if (existingUsername)
       throw new ConflictException(`${username} is already in used.`);
@@ -105,9 +129,11 @@ export class AuthService {
       where: { email },
     });
 
+    const hash = await hashPassword(password);
+
     // save code
     await this.prismaService.emailVerification.create({
-      data: { email, expiresAt, code },
+      data: { ...dto, expiresAt, code, password: hash },
     });
 
     // send code to there email

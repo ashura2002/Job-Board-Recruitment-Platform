@@ -148,6 +148,14 @@ export type SkillScalarFieldEnum = (typeof SkillScalarFieldEnum)[keyof typeof Sk
 export const EmailVerificationScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  password: 'password',
+  fullname: 'fullname',
+  username: 'username',
+  role: 'role',
+  age: 'age',
+  isActive: 'isActive',
+  companyName: 'companyName',
+  deletedAt: 'deletedAt',
   code: 'code',
   expiresAt: 'expiresAt',
   createdAt: 'createdAt'

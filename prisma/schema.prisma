@@ -119,11 +119,19 @@ model Skill {
 }
 
 model EmailVerification {
-  id        Int      @id @default(autoincrement())
-  email     String
-  code      String
-  expiresAt DateTime
-  createdAt DateTime @default(now())
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  password    String
+  fullname    String
+  username    String    @unique
+  role        Role      @default(Jobseeker)
+  age         Int
+  isActive    Boolean   @default(false)
+  companyName String?
+  deletedAt   DateTime?
+  code        String
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
 
   @@index([email])
 }
