@@ -261,14 +261,15 @@ get user by id must shown there skills too - DONE
 if user was hired then the company was not null for that user - DONE
 
 implement Oauth2.0
-* registration of recruiter first
-* rename the endpoints of registerAsJobSeeker it should send gmail verification code since it only send a code if it is valid 
-* the creation of email is on the verify email only if its valid then user will be created
-* refactor the register endpoint
-* it should return only verification send on their email
-* gmail-code-verification: if the code is valid then the credential will created and save to DB
+nodemailer for gmail notifications - DONE
+* registration of recruiter first - DONE
+* rename the endpoints of registerAsJobSeeker it should send gmail verification code since it only send a code if it is valid  - DONE
+* the creation of email is on the verify email only if its valid then user will be created - DONE 
+* refactor the register endpoint - DONE
+* it should return only verification send on their email - DONE
+* gmail-code-verification: if the code is valid then the credential will created and save to DB - DONE
+* in recover it should sent a code to there email
+* 
 * added background job delete all the expired code on table
-
-nodemailer for gmail notifications
 create unit test for every controller and service
 */

@@ -15,10 +15,9 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDTO } from './dto/login.dto';
 import { IJwtResponse } from '../../common/types/jwt.types';
 import { RecoverDTO } from './dto/recover.dto';
-import { CreateRecruiterDTO } from '../users/dto/create-recruiter.dto';
 import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
 import { MailService } from '../mail/mail.service';
-import { User } from 'src/generated/prisma/client';
+import { Role, User } from 'src/generated/prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -29,15 +28,15 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
-  async sendCodeInEmailAsRecruiter(dto: CreateRecruiterDTO): Promise<void> {
-    await this.sendUsersCodes(dto);
+  async sendCodeInEmailAsRecruiter(dto: CreateUserDTO): Promise<void> {
+    await this.sendUsersCodes(dto, Role.Recruiter);
   }
 
   async sendCodeInEmailAsJobseeker(dto: CreateUserDTO): Promise<void> {
-    await this.sendUsersCodes(dto);
+    await this.sendUsersCodes(dto, Role.Jobseeker);
   }
 
-  async gmailVerificationCode(dto: gmailVerificationCodeDTO): Promise<any> {
+  async gmailVerificationCode(dto: gmailVerificationCodeDTO): Promise<void> {
     const { code } = dto;
     const record = await this.prismaService.emailVerification.findFirst({
       where: {
@@ -48,7 +47,15 @@ export class AuthService {
       },
     });
     if (!record) throw new BadRequestException('Invalid or expired code');
+    const existingEmail = await this.userService.findUserbyEmail(record.email);
+    if (existingEmail) throw new BadRequestException('Email is already used');
+    const existingUsername = await this.userService.findByUserName(
+      record.username,
+    );
+    if (existingUsername)
+      throw new BadRequestException('Username is already exist');
 
+    // create the pending user
     await this.prismaService.user.create({
       data: {
         email: record.email,
@@ -56,11 +63,20 @@ export class AuthService {
         fullname: record.fullname,
         username: record.username,
         age: record.age,
-        role: record.role, // FIX THIS BUG: even if the user will register as a recruiter then the role is always been jobseeker
+        role: record.role,
+        companyName: record.companyName,
       },
+    });
+
+    // delete code after the successfull of creation of user
+    await this.prismaService.emailVerification.delete({
+      where: { id: record.id },
     });
   }
 
+  // need to verify the code to recover account
+  // before deleting account code must be send
+  // if code is valid account must be deleted (soft-delete)
   async recoverAccount(recoverDTO: RecoverDTO): Promise<void> {
     const { email } = recoverDTO;
     const user = await this.userService.findUserbyEmail(email);
@@ -112,28 +128,30 @@ export class AuthService {
     });
   }
 
-  private async sendUsersCodes(dto: CreateUserDTO): Promise<void> {
-    const { email, username, password } = dto;
-    const existingUsername = await this.userService.findByUserName(username);
+  private async sendUsersCodes(dto: CreateUserDTO, role: Role): Promise<void> {
+    const { email, username, password, companyName } = dto;
+    const existingEmail = await this.prismaService.emailVerification.findUnique(
+      {
+        where: { email },
+      },
+    );
+    if (existingEmail) throw new ConflictException('Email is already in used.');
+    const existingUsername =
+      await this.prismaService.emailVerification.findUnique({
+        where: { username },
+      });
     if (existingUsername)
       throw new ConflictException(`${username} is already in used.`);
-    const existingEmail = await this.userService.findUserbyEmail(email);
-    if (existingEmail) throw new ConflictException('Email is already in used.');
 
     // generate code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    // remove old code
-    await this.prismaService.emailVerification.deleteMany({
-      where: { email },
-    });
-
     const hash = await hashPassword(password);
 
     // save code
     await this.prismaService.emailVerification.create({
-      data: { ...dto, expiresAt, code, password: hash },
+      data: { ...dto, expiresAt, code, password: hash, role, companyName },
     });
 
     // send code to there email
