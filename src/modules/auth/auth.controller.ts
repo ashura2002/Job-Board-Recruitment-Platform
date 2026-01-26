@@ -8,14 +8,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDTO } from '../users/dto/create-user.dto';
-import { IUserWithOutPassword } from '../users/dto/user-response.dto';
 import { LoginDTO } from './dto/login.dto';
 import type { AuthUser } from 'src/common/types/auth-user';
 import { JwtGuard } from 'src/common/guards/Jwt.guard';
 import { RecoverDTO } from './dto/recover.dto';
-import { CreateRecruiterDTO } from '../users/dto/create-recruiter.dto';
 import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
+import { CreateUserDTO } from '../users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -24,7 +22,7 @@ export class AuthController {
   @Post('registration/recruiter')
   @HttpCode(HttpStatus.CREATED)
   async registerAsRecruiter(
-    @Body() dto: CreateRecruiterDTO,
+    @Body() dto: CreateUserDTO,
   ): Promise<{ message: string }> {
     await this.authService.sendCodeInEmailAsRecruiter(dto);
     return { message: 'Verification code sent to email' };
@@ -54,7 +52,7 @@ export class AuthController {
     @Body() dto: gmailVerificationCodeDTO,
   ): Promise<{ message: string }> {
     await this.authService.gmailVerificationCode(dto);
-    return { message: 'Created Successfully' };
+    return { message: 'Created Successfully, You can now login your account' };
   }
 
   @Post('recover')
