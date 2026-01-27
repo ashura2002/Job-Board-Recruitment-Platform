@@ -74,9 +74,6 @@ export class AuthService {
     });
   }
 
-  // need to verify the code to recover account
-  // before deleting account code must be send
-  // if code is valid account must be deleted (soft-delete)
   async recoverAccount(recoverDTO: RecoverDTO): Promise<void> {
     const { email } = recoverDTO;
     const user = await this.userService.findUserbyEmail(email);
@@ -86,11 +83,17 @@ export class AuthService {
       );
     if (!user.deletedAt)
       throw new BadRequestException('This account is not been deleted');
-    await this.prismaService.user.update({
-      where: { email: email },
-      data: { deletedAt: null },
-    });
+
+    // generate code
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+    // code must send to gmail
+    // then verify to the new endpoint if valid then it will recover successfully
   }
+
+  // this service the real recovery of soft deleted user
+  // if there code is valid
+  async verifyCodeToRecoverAccount(): Promise<any> {}
 
   async login(dto: LoginDTO): Promise<string> {
     const { username, password } = dto;

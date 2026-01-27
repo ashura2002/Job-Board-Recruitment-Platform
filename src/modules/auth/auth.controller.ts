@@ -55,14 +55,21 @@ export class AuthController {
     return { message: 'Created Successfully, You can now login your account' };
   }
 
-  @Post('recover')
+  @Post('send-code-to-recover')
   @HttpCode(HttpStatus.CREATED)
   async recoverAccount(
     @Body() recoverDTO: RecoverDTO,
   ): Promise<{ message: string }> {
     await this.authService.recoverAccount(recoverDTO);
-    return { message: 'Recover Successfully, Try to login Again' };
+    return {
+      message:
+        'Code was sent to your gmail successfully use it recover you account.',
+    };
   }
+
+  @Post('verify-gmail-to-recover-account')
+  @HttpCode(HttpStatus.OK)
+  async verifyCodeToRecoverAccount(): Promise<any> {}
 
   @Post('logout')
   @UseGuards(JwtGuard)
