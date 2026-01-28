@@ -56,7 +56,8 @@ export const ModelName = {
   Application: 'Application',
   Notification: 'Notification',
   Skill: 'Skill',
-  EmailVerification: 'EmailVerification'
+  EmailVerification: 'EmailVerification',
+  AccountRecovery: 'AccountRecovery'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -162,6 +163,17 @@ export const EmailVerificationScalarFieldEnum = {
 } as const
 
 export type EmailVerificationScalarFieldEnum = (typeof EmailVerificationScalarFieldEnum)[keyof typeof EmailVerificationScalarFieldEnum]
+
+
+export const AccountRecoveryScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  code: 'code',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AccountRecoveryScalarFieldEnum = (typeof AccountRecoveryScalarFieldEnum)[keyof typeof AccountRecoveryScalarFieldEnum]
 
 
 export const SortOrder = {
