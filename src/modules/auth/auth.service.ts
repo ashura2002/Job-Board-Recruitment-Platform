@@ -19,6 +19,7 @@ import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
 import { MailService } from '../mail/mail.service';
 import { Role, User } from 'src/generated/prisma/client';
 import { AccountRecoveryCode } from './dto/account.recover.dto';
+import { GoogleResponseType } from 'src/common/types/google.types';
 
 @Injectable()
 export class AuthService {
@@ -148,6 +149,28 @@ export class AuthService {
       role: user.role,
       fullname: user.fullname,
       username: user.username,
+    };
+    const accessToken = await this.jwtService.signAsync(payload);
+    return accessToken;
+  }
+
+  // FOR OAUTH
+  async googleLogin(googleUser: GoogleResponseType) {
+    const { email } = googleUser;
+    console.log('googleUserShape:', googleUser);
+
+    const user = await this.userService.findUserbyEmail(email);
+    if (!user)
+      throw new BadRequestException(
+        'Your email account is not registered. Contact admin.',
+      );
+    // if exist create token
+    const payload: IJwtResponse = {
+      userId: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      fullname: user.fullname,
     };
     const accessToken = await this.jwtService.signAsync(payload);
     return accessToken;
