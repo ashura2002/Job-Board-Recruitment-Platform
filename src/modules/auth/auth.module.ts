@@ -8,6 +8,7 @@ import { jwtConfigFactory } from 'src/config/jwt.config';
 import { PrismaModule } from 'src/common/prisma/prisma.module';
 import googleOauthConfig from 'src/config/google-oauth-config';
 import { MailModule } from '../mail/mail.module';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { MailModule } from '../mail/mail.module';
     ConfigModule.forFeature(googleOauthConfig),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, GoogleStrategy],
 })
 export class AuthModule {}
