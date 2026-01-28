@@ -14,6 +14,7 @@ import { JwtGuard } from 'src/common/guards/Jwt.guard';
 import { RecoverDTO } from './dto/recover.dto';
 import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
+import { AccountRecoveryCode } from './dto/account.recover.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -69,7 +70,12 @@ export class AuthController {
 
   @Post('verify-gmail-to-recover-account')
   @HttpCode(HttpStatus.OK)
-  async verifyCodeToRecoverAccount(): Promise<any> {}
+  async verifyCodeToRecoverAccount(
+    @Body() dto: AccountRecoveryCode,
+  ): Promise<{ message: string }> {
+    await this.authService.verifyCodeToRecoverAccount(dto);
+    return { message: 'Your account was successfully recover try to login ' };
+  }
 
   @Post('logout')
   @UseGuards(JwtGuard)

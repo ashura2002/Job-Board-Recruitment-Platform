@@ -47,3 +47,8 @@ export type Skill = Prisma.SkillModel
  * 
  */
 export type EmailVerification = Prisma.EmailVerificationModel
+/**
+ * Model AccountRecovery
+ * 
+ */
+export type AccountRecovery = Prisma.AccountRecoveryModel
