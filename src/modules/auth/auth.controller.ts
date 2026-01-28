@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -15,6 +16,8 @@ import { RecoverDTO } from './dto/recover.dto';
 import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { AccountRecoveryCode } from './dto/account.recover.dto';
+import { GoogleAuthGuard } from 'src/common/guards/google.guard';
+import type { GoogleResponseType } from 'src/common/types/google.types';
 
 @Controller('auth')
 export class AuthController {
@@ -45,6 +48,19 @@ export class AuthController {
   ): Promise<{ message: string; token: string }> {
     const accessToken = await this.authService.login(dto);
     return { message: 'Login Successfully', token: accessToken };
+  }
+
+  // for OAUTH with google providers
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  googleLogin() {
+    // Google handles redirect
+  }
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  async googleCallback(@Req() req: GoogleResponseType) {
+    return this.authService.googleLogin(req);
   }
 
   @Post('gmail-code-verification')
