@@ -389,7 +389,8 @@ export const ModelName = {
   Application: 'Application',
   Notification: 'Notification',
   Skill: 'Skill',
-  EmailVerification: 'EmailVerification'
+  EmailVerification: 'EmailVerification',
+  AccountRecovery: 'AccountRecovery'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "job" | "application" | "notification" | "skill" | "emailVerification"
+    modelProps: "user" | "job" | "application" | "notification" | "skill" | "emailVerification" | "accountRecovery"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +854,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AccountRecovery: {
+      payload: Prisma.$AccountRecoveryPayload<ExtArgs>
+      fields: Prisma.AccountRecoveryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AccountRecoveryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AccountRecoveryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload>
+        }
+        findFirst: {
+          args: Prisma.AccountRecoveryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AccountRecoveryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload>
+        }
+        findMany: {
+          args: Prisma.AccountRecoveryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload>[]
+        }
+        create: {
+          args: Prisma.AccountRecoveryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload>
+        }
+        createMany: {
+          args: Prisma.AccountRecoveryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AccountRecoveryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload>[]
+        }
+        delete: {
+          args: Prisma.AccountRecoveryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload>
+        }
+        update: {
+          args: Prisma.AccountRecoveryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload>
+        }
+        deleteMany: {
+          args: Prisma.AccountRecoveryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AccountRecoveryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AccountRecoveryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload>[]
+        }
+        upsert: {
+          args: Prisma.AccountRecoveryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountRecoveryPayload>
+        }
+        aggregate: {
+          args: Prisma.AccountRecoveryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAccountRecovery>
+        }
+        groupBy: {
+          args: Prisma.AccountRecoveryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccountRecoveryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AccountRecoveryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccountRecoveryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -979,6 +1054,17 @@ export const EmailVerificationScalarFieldEnum = {
 } as const
 
 export type EmailVerificationScalarFieldEnum = (typeof EmailVerificationScalarFieldEnum)[keyof typeof EmailVerificationScalarFieldEnum]
+
+
+export const AccountRecoveryScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  code: 'code',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AccountRecoveryScalarFieldEnum = (typeof AccountRecoveryScalarFieldEnum)[keyof typeof AccountRecoveryScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1230,6 +1316,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   skill?: Prisma.SkillOmit
   emailVerification?: Prisma.EmailVerificationOmit
+  accountRecovery?: Prisma.AccountRecoveryOmit
 }
 
 /* Types for Logging */

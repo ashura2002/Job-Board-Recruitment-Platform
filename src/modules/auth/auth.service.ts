@@ -18,6 +18,7 @@ import { RecoverDTO } from './dto/recover.dto';
 import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
 import { MailService } from '../mail/mail.service';
 import { Role, User } from 'src/generated/prisma/client';
+import { AccountRecoveryCode } from './dto/account.recover.dto';
 
 @Injectable()
 export class AuthService {
@@ -88,12 +89,41 @@ export class AuthService {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
     // code must send to gmail
-    // then verify to the new endpoint if valid then it will recover successfully
+    await this.mailService.sendVerificationCode(email, code);
+    // save to db
+    await this.prismaService.accountRecovery.create({
+      data: {
+        email,
+        code,
+        expiresAt,
+      },
+    });
   }
 
-  // this service the real recovery of soft deleted user
-  // if there code is valid
-  async verifyCodeToRecoverAccount(): Promise<any> {}
+  async verifyCodeToRecoverAccount(dto: AccountRecoveryCode): Promise<void> {
+    const { code } = dto;
+    const accountToRecover = await this.prismaService.accountRecovery.findFirst(
+      {
+        where: {
+          code,
+          expiresAt: {
+            gt: new Date(),
+          },
+        },
+      },
+    );
+    if (!accountToRecover)
+      throw new NotFoundException('Invalid Code, Code not found');
+
+    await this.prismaService.user.update({
+      where: { email: accountToRecover.email },
+      data: { deletedAt: null },
+    });
+
+    await this.prismaService.accountRecovery.delete({
+      where: { email: accountToRecover.email },
+    });
+  }
 
   async login(dto: LoginDTO): Promise<string> {
     const { username, password } = dto;
