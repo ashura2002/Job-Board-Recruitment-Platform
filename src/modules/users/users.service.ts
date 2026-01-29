@@ -268,7 +268,7 @@ nodemailer for gmail notifications - DONE
 * refactor the register endpoint - DONE
 * it should return only verification send on their email - DONE
 * gmail-code-verification: if the code is valid then the credential will created and save to DB - DONE
-* in recover it should sent a code to there email
+* in recover it should sent a code to there email - DONE
 * 
 * added background job delete all the expired code on table
 create unit test for every controller and service
