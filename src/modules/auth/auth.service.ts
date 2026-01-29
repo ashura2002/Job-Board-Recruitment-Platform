@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/common/prisma/prisma.service';
@@ -20,9 +21,12 @@ import { MailService } from '../mail/mail.service';
 import { Role, User } from 'src/generated/prisma/client';
 import { AccountRecoveryCode } from './dto/account.recover.dto';
 import { GoogleResponseType } from 'src/common/types/google.types';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger();
+
   constructor(
     private readonly prismaService: PrismaService,
     private readonly userService: UsersService,
@@ -212,5 +216,46 @@ export class AuthService {
 
     // send code to there email
     await this.mailService.sendVerificationCode(email, code);
+  }
+
+  // BACKGROUND JOBS
+
+  // registering account
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async deleteExpiredRegistrationCodes() {
+    const now = new Date();
+
+    const result = await this.prismaService.emailVerification.deleteMany({
+      where: {
+        expiresAt: {
+          lt: now,
+        },
+      },
+    });
+
+    if (result.count > 0) {
+      this.logger.log(`Deleted ${result.count} expired registration codes`);
+    }
+  }
+
+  // recovering account
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async deleteExpiredRecoveryCode() {
+    const now = new Date();
+
+    const expiredRecoveryCode =
+      await this.prismaService.accountRecovery.deleteMany({
+        where: {
+          expiresAt: {
+            lt: now,
+          },
+        },
+      });
+
+    if (expiredRecoveryCode.count > 0) {
+      this.logger.log(
+        `Deleted ${expiredRecoveryCode.count} expired recovery codes`,
+      );
+    }
   }
 }
