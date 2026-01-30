@@ -18,7 +18,7 @@ import { IJwtResponse } from '../../common/types/jwt.types';
 import { RecoverDTO } from './dto/recover.dto';
 import { gmailVerificationCodeDTO } from './dto/gmail.verification.dto';
 import { MailService } from '../mail/mail.service';
-import { Role, User } from 'src/generated/prisma/client';
+import { Role } from 'src/generated/prisma/client';
 import { AccountRecoveryCode } from './dto/account.recover.dto';
 import { GoogleResponseType } from 'src/common/types/google.types';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -52,6 +52,8 @@ export class AuthService {
         },
       },
     });
+    const { email, password, fullname, username, age, role, companyName } =
+      record;
     if (!record) throw new BadRequestException('Invalid or expired code');
     const existingEmail = await this.userService.findUserbyEmail(record.email);
     if (existingEmail) throw new BadRequestException('Email is already used');
@@ -64,13 +66,13 @@ export class AuthService {
     // create the pending user
     await this.prismaService.user.create({
       data: {
-        email: record.email,
-        password: record.password,
-        fullname: record.fullname,
-        username: record.username,
-        age: record.age,
-        role: record.role,
-        companyName: record.companyName,
+        email: email,
+        password: password,
+        fullname: fullname,
+        username: username,
+        age: age,
+        role: role,
+        companyName: companyName,
       },
     });
 
@@ -131,15 +133,15 @@ export class AuthService {
   }
 
   async login(dto: LoginDTO): Promise<string> {
-    const { username, password } = dto;
-    const user = await this.userService.findByUserName(username);
+    const { password } = dto;
+    const user = await this.userService.findByUserName(dto.username);
     if (!user) throw new NotFoundException('User not found');
 
     if (user.deletedAt)
       throw new BadRequestException(
         'Account has been deleted, Try to recover.',
       );
-
+    const { id, email, role, fullname, username } = user;
     const isPasswordMatch = await compareHashPassword(password, user.password);
     await this.prismaService.user.update({
       where: { id: user.id },
@@ -148,11 +150,11 @@ export class AuthService {
 
     if (!isPasswordMatch) throw new BadRequestException('Invalid Credentials');
     const payload: IJwtResponse = {
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-      fullname: user.fullname,
-      username: user.username,
+      userId: id,
+      email: email,
+      role: role,
+      fullname: fullname,
+      username: username,
     };
     const accessToken = await this.jwtService.signAsync(payload);
     return accessToken;
@@ -160,21 +162,20 @@ export class AuthService {
 
   // FOR OAUTH
   async googleLogin(googleUser: GoogleResponseType) {
-    const { email } = googleUser;
     console.log('googleUserShape:', googleUser);
-
-    const user = await this.userService.findUserbyEmail(email);
+    const user = await this.userService.findUserbyEmail(googleUser.email);
+    const { id, username, email, role, fullname } = user;
     if (!user)
       throw new BadRequestException(
         'Your email account is not registered. Contact admin.',
       );
     // if exist create token
     const payload: IJwtResponse = {
-      userId: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      fullname: user.fullname,
+      userId: id,
+      username: username,
+      email: email,
+      role: role,
+      fullname: fullname,
     };
     const accessToken = await this.jwtService.signAsync(payload);
     return accessToken;

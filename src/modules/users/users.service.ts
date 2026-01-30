@@ -239,37 +239,3 @@ export class UsersService {
   }
 }
 
-/*
-to do 
-user -> skills
-user probably and array of skill or none - done
-the skill set needed will be listed on job description - done
-add a created at and updated at on skill model - done 
-block the creation of duplcate skill on every user - done
-add update method for skill - done
-get all skill by admin - done 
-get skill by id for admin - done
-query string the job search - done 
-test the query string create a new job then query it by searchForJobName method - done
-
-add pagination on get all methods: 
-USER - DONE
-JOBS - DONE
-SKILLS - DONE
-user can see there skill on get current user - DONE
-get user by id must shown there skills too - DONE
-if user was hired then the company was not null for that user - DONE
-
-implement Oauth2.0
-nodemailer for gmail notifications - DONE
-* registration of recruiter first - DONE
-* rename the endpoints of registerAsJobSeeker it should send gmail verification code since it only send a code if it is valid  - DONE
-* the creation of email is on the verify email only if its valid then user will be created - DONE 
-* refactor the register endpoint - DONE
-* it should return only verification send on their email - DONE
-* gmail-code-verification: if the code is valid then the credential will created and save to DB - DONE
-* in recover it should sent a code to there email - DONE
-* 
-* added background job delete all the expired code on table
-create unit test for every controller and service
-*/
